@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <title>{{name}}</title>
-<script src="static/hello.js"></script>
+<script src="static/main.js"></script>
 
 <body>
 

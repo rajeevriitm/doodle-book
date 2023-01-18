@@ -7,7 +7,7 @@ fn rocket() -> _ {
     rocket::build()
         .mount("/", routes![home])
         .attach(Template::fairing())
-        .mount("/static", FileServer::from(relative!("/templates/dist/")))
+        .mount("/static", FileServer::from(relative!("assets/dist/")))
 }
 #[get("/")]
 fn home() -> Template {
