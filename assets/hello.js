@@ -1,3 +1,7 @@
-import("../doodle-wasm/pkg").catch((er) => {
-    console.log(er);
-})
+import("../doodle-wasm/pkg")
+    .then((wasm) => {
+        wasm.start();
+    })
+    .catch((er) => {
+        console.log(er);
+    })

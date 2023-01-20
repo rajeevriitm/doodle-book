@@ -1,17 +1,19 @@
+use std::borrow::Borrow;
 use std::cell::{Cell, RefCell};
 use std::rc::Rc;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 #[derive(Debug, Default)]
 #[wasm_bindgen]
-struct Drawing {
+pub struct Drawing {
     points: Rc<RefCell<Vec<Vec<(i32, i32)>>>>,
 }
 #[wasm_bindgen]
 impl Drawing {
-    fn send_points_to_backend(&self) {}
+    #[wasm_bindgen]
+    pub fn send_points_to_backend(&self) {}
 }
-#[wasm_bindgen(start)]
+#[wasm_bindgen]
 pub fn start() -> Result<(), JsValue> {
     let drawing = Drawing::default();
     let document = web_sys::window().unwrap().document().unwrap();
@@ -19,6 +21,26 @@ pub fn start() -> Result<(), JsValue> {
         .create_element("canvas")?
         .dyn_into::<web_sys::HtmlCanvasElement>()?;
     document.body().unwrap().append_child(&canvas)?;
+
+    {
+        let points_clone = drawing.points.clone();
+
+        let button = document.get_element_by_id("canvas-button").unwrap();
+        let input = document
+            .get_element_by_id("points")
+            .unwrap()
+            .dyn_into::<web_sys::HtmlInputElement>()?;
+        let closure = Closure::<dyn FnMut(_)>::new(move |event: web_sys::MouseEvent| {
+            // let a = form.get_with_name("fname").unwrap();
+            // let a = format!("{:?}", &points_clone.borrow());
+            input.set_value("22");
+            // web_sys::console::log_1(&a.into());
+            // form.submit().expect("form");
+        });
+        button.add_event_listener_with_callback("click", closure.as_ref().unchecked_ref())?;
+        closure.forget();
+    }
+
     canvas.set_width(640);
     canvas.set_height(480);
     canvas.style().set_property("border", "solid")?;
@@ -33,6 +55,8 @@ pub fn start() -> Result<(), JsValue> {
         let context = context.clone();
         let pressed = pressed.clone();
         let closure = Closure::<dyn FnMut(_)>::new(move |event: web_sys::MouseEvent| {
+            // web_sys::console::log_1(1.into());
+            // web_sys::console::log_1(&points_clone.into());
             context.begin_path();
             context.move_to(event.offset_x() as f64, event.offset_y() as f64);
             pressed.set(true);
