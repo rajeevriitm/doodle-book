@@ -1,8 +1,10 @@
-use std::borrow::Borrow;
+// use std::borrow::Borrow;
 use std::cell::{Cell, RefCell};
+// use std::ops::Deref;
 use std::rc::Rc;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
+
 #[derive(Debug, Default)]
 #[wasm_bindgen]
 pub struct Drawing {
@@ -31,11 +33,18 @@ pub fn start() -> Result<(), JsValue> {
             .unwrap()
             .dyn_into::<web_sys::HtmlInputElement>()?;
         let closure = Closure::<dyn FnMut(_)>::new(move |event: web_sys::MouseEvent| {
+            let b = vec![vec![1]];
             // let a = form.get_with_name("fname").unwrap();
+            // let a = serde_json::to_string::<Vec<Vec<(i32, i32)>>>(&RefCell::borrow(&points_clone));
+            let a = serde_json::to_string::<Vec<Vec<(i32, i32)>>>(&points_clone.borrow()).unwrap();
+            let res = serde_json::from_str::<Vec<Vec<(i32, i32)>>>(&a).unwrap();
+
             // let a = format!("{:?}", &points_clone.borrow());
-            input.set_value("22");
+            // format!("{:?}", vec![vec![1]]);
+            web_sys::console::log_1(&res[0][0].0.into());
+            input.set_value(&a);
             // web_sys::console::log_1(&a.into());
-            // form.submit().expect("form");
+            input.form().unwrap().submit().expect("form");
         });
         button.add_event_listener_with_callback("click", closure.as_ref().unchecked_ref())?;
         closure.forget();

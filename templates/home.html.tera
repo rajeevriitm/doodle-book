@@ -6,12 +6,9 @@
 <body>
 
 
-    <form method="post" action="/new" id="canvas-form">
-        <label for="fname">First name:</label><br>
-        <input type="text" id="points" name="fname"><br>
-        <label for="lname">Last name:</label><br>
-        <input type="text" id="lname" name="lname">
-        <input type="submit" value="Submit">
+    <form method="post" action="/create" id="canvas-form" enctype='multipart/form-data'>
+        <label for="points">First name:</label><br>
+        <input type="hidden" id="points" name="points"><br>
         <input type="button" id="canvas-button" value="Submit">
     </form>
 </body>

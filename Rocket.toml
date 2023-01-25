@@ -1,0 +1,2 @@
+[default.databases]
+doodles = { url = "postgres://raj:iitm@localhost:5432/doodles" }
