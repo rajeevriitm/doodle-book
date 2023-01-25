@@ -1,7 +1,8 @@
 // use diesel::insert_into;
 // use rocket_sync_db_pools::diesel::*;
 use diesel::prelude::*;
-use rocket::serde::{Deserialize, Serialize};
+// use rocket::serde::{Deserialize, Serialize};
+use rocket::form::{self, Error};
 use rocket_sync_db_pools::{database, diesel};
 #[database("doodles")]
 pub struct Db(diesel::PgConnection);
@@ -18,7 +19,23 @@ pub struct Drawing {
 #[derive(Insertable, FromForm)]
 #[table_name = "drawings"]
 pub struct NewDrawing {
+    #[field(validate=check_points_format())]
     pub points: String,
+}
+fn check_points_format<'v>(string: &String) -> form::Result<'v, ()> {
+    let res = serde_json::from_str::<Vec<Vec<[i32; 2]>>>(string);
+    res.map_or(
+        Err(Error::validation("Invalid points").into()),
+        |collection| {
+            let count = collection.iter().flatten().count();
+            if count >= 1 {
+                Ok(())
+            } else {
+                Err(Error::validation("Canvas cant be empty").into())
+            }
+        },
+    )
+    // println!("{:?}", &res);
 }
 impl NewDrawing {
     pub fn save_to_db(&self, conn: &mut diesel::PgConnection) -> QueryResult<Drawing> {

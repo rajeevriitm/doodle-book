@@ -8,15 +8,10 @@ use wasm_bindgen::JsCast;
 #[derive(Debug, Default)]
 #[wasm_bindgen]
 pub struct Drawing {
-    points: Rc<RefCell<Vec<Vec<(i32, i32)>>>>,
+    points: Rc<RefCell<Vec<Vec<[i32; 2]>>>>,
 }
 #[wasm_bindgen]
-impl Drawing {
-    #[wasm_bindgen]
-    pub fn send_points_to_backend(&self) {}
-}
-#[wasm_bindgen]
-pub fn start() -> Result<(), JsValue> {
+pub async fn start() -> Result<(), JsValue> {
     let drawing = Drawing::default();
     let document = web_sys::window().unwrap().document().unwrap();
     let canvas = document
@@ -33,17 +28,11 @@ pub fn start() -> Result<(), JsValue> {
             .unwrap()
             .dyn_into::<web_sys::HtmlInputElement>()?;
         let closure = Closure::<dyn FnMut(_)>::new(move |event: web_sys::MouseEvent| {
-            let b = vec![vec![1]];
-            // let a = form.get_with_name("fname").unwrap();
-            // let a = serde_json::to_string::<Vec<Vec<(i32, i32)>>>(&RefCell::borrow(&points_clone));
-            let a = serde_json::to_string::<Vec<Vec<(i32, i32)>>>(&points_clone.borrow()).unwrap();
-            let res = serde_json::from_str::<Vec<Vec<(i32, i32)>>>(&a).unwrap();
-
-            // let a = format!("{:?}", &points_clone.borrow());
-            // format!("{:?}", vec![vec![1]]);
-            web_sys::console::log_1(&res[0][0].0.into());
-            input.set_value(&a);
-            // web_sys::console::log_1(&a.into());
+            let points =
+                serde_json::to_string::<Vec<Vec<[i32; 2]>>>(&points_clone.borrow()).unwrap();
+            web_sys::console::log_1(&points.clone().into());
+            input.set_value(&points);
+            // web_sys::console::log_1(&points.into());
             input.form().unwrap().submit().expect("form");
         });
         button.add_event_listener_with_callback("click", closure.as_ref().unchecked_ref())?;
@@ -71,7 +60,7 @@ pub fn start() -> Result<(), JsValue> {
             pressed.set(true);
             points_clone
                 .borrow_mut()
-                .push(vec![(event.offset_x(), event.offset_y())]);
+                .push(vec![[event.offset_x(), event.offset_y()]]);
         });
         canvas.add_event_listener_with_callback("mousedown", closure.as_ref().unchecked_ref())?;
         closure.forget();
@@ -91,7 +80,7 @@ pub fn start() -> Result<(), JsValue> {
                     .borrow_mut()
                     .last_mut()
                     .unwrap()
-                    .push((event.offset_x(), event.offset_y()));
+                    .push([event.offset_x(), event.offset_y()]);
             }
         });
         canvas.add_event_listener_with_callback("mousemove", closure.as_ref().unchecked_ref())?;

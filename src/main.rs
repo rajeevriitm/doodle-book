@@ -25,12 +25,6 @@ fn home() -> Template {
 }
 #[post("/create", data = "<drawing>")]
 async fn save_drawing(drawing: Form<NewDrawing>, db: Db) -> Result<String, String> {
-    // let res: Vec<String> = json::from_str(&drawing.points).unwrap();
-    // let res: Vec<String> = json::from_str(&res);
-    let res = serde_json::from_str::<Vec<Vec<(i32, i32)>>>(&drawing.points);
-    let res = serde_json::from_str::<Vec<Vec<(i32)>>>("[[(1)]]");
-    // let bool = res.unwrap().iter().flatten().count();
-    println!("{:?}", &res);
     let val = db
         .run(move |conn| drawing.save_to_db(conn))
         .await
