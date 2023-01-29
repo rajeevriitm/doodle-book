@@ -6,7 +6,7 @@
 <body>
 
 
-    <form method="post" action="/create" id="canvas-form" enctype='multipart/form-data'>
+    <form method="post" action="/create" id="canvas-form">
         <label for="points">First name:</label><br>
         <input type="hidden" id="points" name="points"><br>
         <input type="button" id="canvas-button" value="Submit">

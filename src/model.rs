@@ -16,7 +16,7 @@ pub struct Drawing {
     created_at: SystemTime,
     updated_at: SystemTime,
 }
-#[derive(Insertable, FromForm)]
+#[derive(Insertable, FromForm, Clone)]
 #[table_name = "drawings"]
 pub struct NewDrawing {
     #[field(validate=check_points_format())]
@@ -38,9 +38,9 @@ fn check_points_format<'v>(string: &String) -> form::Result<'v, ()> {
     // println!("{:?}", &res);
 }
 impl NewDrawing {
-    pub fn save_to_db(&self, conn: &mut diesel::PgConnection) -> QueryResult<Drawing> {
+    pub fn save_to_db(&self, conn: &mut diesel::PgConnection) -> QueryResult<usize> {
         diesel::insert_into(drawings::table)
             .values(self)
-            .get_result(conn)
+            .execute(conn)
     }
 }
