@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<title>Doodle Book |
+    {% block title %}
+    Welcome
+    {% endblock title %}
+</title>
+{% block script %}
+
+{% endblock script %}
+
+<body>
+    {% block body %}
+
+    {% endblock body %}
+    {# {% if flash is defined %} #}
+</body>
+
+</html>

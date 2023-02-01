@@ -2,42 +2,25 @@
 extern crate rocket;
 #[macro_use]
 extern crate diesel;
-use rocket::form::{error, Contextual, Form};
 use rocket::fs::{relative, FileServer};
 mod model;
+mod routes;
 mod schema;
-use model::{Db, Drawing, NewDrawing};
-use rocket::response::Redirect;
-use rocket_dyn_templates::{context, Template};
+// use crate::model::Db;
+use rocket_dyn_templates::Template;
+use rocket_sync_db_pools::database;
+use routes::drawings_route::{home, save_drawing};
+use routes::users_route::{create_user, signup};
 
-// use rocket::serde::json;
+#[database("doodles")]
+pub struct Db(diesel::PgConnection);
 
 #[launch]
 fn rocket() -> _ {
     rocket::build()
         .mount("/", routes![home, save_drawing])
+        .mount("/users", routes![signup, create_user])
         .attach(Template::fairing())
         .attach(Db::fairing())
         .mount("/static", FileServer::from(relative!("assets/dist/")))
 }
-#[get("/")]
-fn home() -> Template {
-    Template::render("home", context! {name: "Rajeev"})
-}
-#[post("/create", data = "<drawing_form>")]
-async fn save_drawing(drawing_form: Form<Contextual<'_, NewDrawing>>, db: Db) -> Redirect {
-    let drawing = drawing_form.value.as_ref().unwrap().clone();
-    let db_exec = db
-        .run(move |conn| drawing.save_to_db(conn))
-        .await
-        .map_err(|_error| String::from("database error "));
-    println!("{:?}", drawing_form.context);
-    // Ok(String::from("fff"))
-    Redirect::to(uri!(home))
-    // let draw = format!("{:?}", val);
-    // println!("{:?}", drawing_form.points);
-}
-// struct Drawing {
-//     points: Vec<Vec<i32>>,
-//     // points: Vec<Vec<(i32, i32)>>,
-// }

@@ -4,20 +4,32 @@ use std::cell::{Cell, RefCell};
 use std::rc::Rc;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
-
+const CANVAS_WIDTH: u32 = 500;
+const CANVAS_HEIGHT: u32 = 400;
 #[derive(Debug, Default)]
 #[wasm_bindgen]
 pub struct Drawing {
     points: Rc<RefCell<Vec<Vec<[i32; 2]>>>>,
 }
 #[wasm_bindgen]
-pub async fn start() -> Result<(), JsValue> {
+pub fn start() -> Result<(), JsValue> {
     let drawing = Drawing::default();
     let document = web_sys::window().unwrap().document().unwrap();
     let canvas = document
         .create_element("canvas")?
         .dyn_into::<web_sys::HtmlCanvasElement>()?;
     document.body().unwrap().append_child(&canvas)?;
+    let width = CANVAS_WIDTH;
+    let height = CANVAS_HEIGHT;
+    canvas.set_width(width);
+    canvas.set_height(height);
+    canvas.style().set_property("border", "solid")?;
+    let context = canvas
+        .get_context("2d")?
+        .unwrap()
+        .dyn_into::<web_sys::CanvasRenderingContext2d>()?;
+    let context = Rc::new(context);
+    let pressed = Rc::new(Cell::new(false));
 
     {
         let points_clone = drawing.points.clone();
@@ -38,18 +50,27 @@ pub async fn start() -> Result<(), JsValue> {
         button.add_event_listener_with_callback("click", closure.as_ref().unchecked_ref())?;
         closure.forget();
     }
-
-    canvas.set_width(640);
-    canvas.set_height(480);
-    canvas.style().set_property("border", "solid")?;
-    let context = canvas
-        .get_context("2d")?
-        .unwrap()
-        .dyn_into::<web_sys::CanvasRenderingContext2d>()?;
-    let context = Rc::new(context);
-    let pressed = Rc::new(Cell::new(false));
-    let points_clone = drawing.points.clone();
     {
+        let points_clone = drawing.points.clone();
+        let context = context.clone();
+
+        let button = document.get_element_by_id("canvas-clear").unwrap();
+        let input = document
+            .get_element_by_id("points")
+            .unwrap()
+            .dyn_into::<web_sys::HtmlInputElement>()?;
+        let closure = Closure::<dyn FnMut(_)>::new(move |event: web_sys::MouseEvent| {
+            let canvas = context.canvas().unwrap();
+            context.clear_rect(0.0, 0.0, canvas.width() as f64, canvas.height() as f64);
+            *points_clone.borrow_mut() = vec![];
+            input.set_value("");
+        });
+        button.add_event_listener_with_callback("click", closure.as_ref().unchecked_ref())?;
+        closure.forget();
+    }
+
+    {
+        let points_clone = drawing.points.clone();
         let context = context.clone();
         let pressed = pressed.clone();
         let closure = Closure::<dyn FnMut(_)>::new(move |event: web_sys::MouseEvent| {
@@ -65,9 +86,9 @@ pub async fn start() -> Result<(), JsValue> {
         canvas.add_event_listener_with_callback("mousedown", closure.as_ref().unchecked_ref())?;
         closure.forget();
     }
-    let points_clone = drawing.points.clone();
 
     {
+        let points_clone = drawing.points.clone();
         let context = context.clone();
         let pressed = pressed.clone();
         let closure = Closure::<dyn FnMut(_)>::new(move |event: web_sys::MouseEvent| {

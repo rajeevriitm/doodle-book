@@ -1,16 +1,21 @@
-<!DOCTYPE html>
-<html>
-<title>{{name}}</title>
+{% extends "base" %}
+{% block title %}
+Home
+{% endblock title %}
+{% block script %}
 <script src="static/main.js"></script>
 
-<body>
+{% endblock script %}
+{% block body %}
 
-
-    <form method="post" action="/create" id="canvas-form">
-        <label for="points">First name:</label><br>
-        <input type="hidden" id="points" name="points"><br>
-        <input type="button" id="canvas-button" value="Submit">
-    </form>
-</body>
-
-</html>
+{# {% if flash is defined %} #}
+The value is: {{ flash }}
+<a href="/users/signup"> Signup</a>
+<a href="/users/signin"> SignIn</a>
+{# {% endif %} #}
+<form method="post" action="/create" id="canvas-form">
+    <input type="hidden" id="points" name="points"><br>
+    <input type="button" id="canvas-clear" value="Clear">
+    <input type="button" id="canvas-button" value="Submit">
+</form>
+{% endblock body %}
