@@ -1,2 +1,5 @@
-[default.databases]
+[debug.databases]
 doodles = { url = "postgres://raj:iitm@localhost:5432/doodles" }
+[debug]
+password_salt = "saltdfhdlifjlidsjlslvjsjdhiosdisosiijifhdoij"
+# PASSWORD_SALT = "salt"

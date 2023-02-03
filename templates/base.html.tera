@@ -10,6 +10,11 @@
 {% endblock script %}
 
 <body>
+    {% if flash %}
+
+    {{ flash.1 }}
+
+    {% endif %}
     {% block body %}
 
     {% endblock body %}

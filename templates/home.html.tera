@@ -9,7 +9,6 @@ Home
 {% block body %}
 
 {# {% if flash is defined %} #}
-The value is: {{ flash }}
 <a href="/users/signup"> Signup</a>
 <a href="/users/signin"> SignIn</a>
 {# {% endif %} #}

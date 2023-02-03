@@ -3,10 +3,11 @@ use crate::Db;
 use rocket::form::Form;
 use rocket::request::FlashMessage;
 use rocket::response::{Flash, Redirect};
+use rocket::State;
 use rocket_dyn_templates::{context, Template};
-
 #[get("/")]
 pub fn home(flash: Option<FlashMessage<'_>>) -> Template {
+    // dbg!(config);
     let flash = flash.map(FlashMessage::into_inner);
     Template::render("home", context! {name: "Rajeev", flash})
 }
