@@ -1,19 +1,66 @@
-use crate::model::user::SignupForm;
+use crate::model::user::{User, UserForm};
+use crate::routes::AuthInfo;
 use crate::Configuration;
 use crate::Db;
 use rocket::form::{Contextual, Form};
+use rocket::http::{Cookie, CookieJar};
 use rocket::request::FlashMessage;
 use rocket::response::{Flash, Redirect};
 use rocket::State;
 use rocket_dyn_templates::{context, Template};
-// use serde_json::json;
-#[get("/signup")]
-pub fn signup() -> Template {
-    Template::render("signup", context! {})
+#[get("/signup", rank = 1)]
+pub fn authenticated_signup(_user: AuthInfo) -> Redirect {
+    Redirect::to("/")
+}
+#[get("/signin", rank = 1)]
+pub fn authenticated_signin(_user: AuthInfo) -> Redirect {
+    Redirect::to("/")
+}
+#[get("/signup", rank = 2)]
+pub fn signup(flash: Option<FlashMessage<'_>>) -> Template {
+    let flash = flash.map(FlashMessage::into_inner);
+    Template::render("signup", context! {flash})
+}
+#[get("/signin", rank = 2)]
+pub fn signin(flash: Option<FlashMessage<'_>>) -> Template {
+    let flash = flash.map(FlashMessage::into_inner);
+    Template::render("signin", context! {flash})
+}
+#[post("/session", data = "<signin_form>")]
+pub async fn create_session(
+    signin_form: Form<Contextual<'_, UserForm>>,
+    db: Db,
+    cookie_jar: &CookieJar<'_>,
+) -> Result<Redirect, Template> {
+    match &signin_form.value {
+        Some(user_form) => {
+            let email = user_form.email.clone();
+            // let password = user_form.password.clone();
+            let user_result = db
+                .run(move |conn| User::find_user_with_email(email, conn))
+                .await;
+            let user =
+                user_result.map_err(|_err| render_template("signin", "Email address incorrect"))?;
+            if user.verify_password(&user_form.password).is_ok() {
+                let cookie = Cookie::new("user_id", user.id.to_string());
+                cookie_jar.add_private(cookie);
+                Ok(Redirect::to("/"))
+            } else {
+                return Err(render_template("signin", "Incorrect password"));
+            }
+            // todo!()
+        }
+        None => Err(Template::render(
+            "signin",
+            context! {flash: ("error","Invalid credentials")},
+        )),
+    }
+    // dbg!(signin_form);
+    // todo!()
 }
 #[post("/create", data = "<user_form>")]
 pub async fn create_user(
-    user_form: Form<Contextual<'_, SignupForm>>,
+    user_form: Form<Contextual<'_, UserForm>>,
     db: Db,
     config: &State<Configuration>,
 ) -> Result<Flash<Redirect>, Template> {
@@ -23,19 +70,21 @@ pub async fn create_user(
             match user.hash_password(&config.password_salt) {
                 Ok(hash) => user.password = hash,
                 Err(err) => {
-                    return Err(Template::render("signup", context! {flash: ("error",err)}))
+                    return Err(render_template("signup", err));
                 }
             }
             dbg!(&user);
             db.run(move |conn| {
                 user.save_to_db(conn)
-                    .map(|_| Flash::success(Redirect::to("/"), "Successfully Signed Up"))
+                    .map(|_| {
+                        Flash::success(
+                            Redirect::to(uri!("/users", signin)),
+                            "Successfully Signed Up",
+                        )
+                    })
                     .map_err(|err| {
                         dbg!(err);
-                        Template::render(
-                            "signup",
-                            context! {flash: ("error","Error occured while saving")},
-                        )
+                        render_template("signup", "Unable to save due to error occured")
                     })
             })
             .await
@@ -47,10 +96,18 @@ pub async fn create_user(
                 .next()
                 .map(|x| format!("{}: {}", x.name.as_ref().unwrap(), x))
                 .unwrap_or("Error occured in form".to_string());
-            Err(Template::render(
-                "signup",
-                context! {flash: ("error",flash)},
-            ))
-        } // dbg!(user_form);
-    } // todo!();
+            Err(render_template("signup", &flash))
+        }
+    }
+}
+#[post("/signout")]
+pub fn signout(cookie: &CookieJar<'_>) -> Flash<Redirect> {
+    cookie.remove_private(Cookie::named("user_id"));
+    Flash::success(
+        Redirect::to(uri!("/users", signin)),
+        "Logged out succesfully!",
+    )
+}
+fn render_template(template: &'static str, err: &str) -> Template {
+    Template::render(template, context! { flash: ("error",err)})
 }

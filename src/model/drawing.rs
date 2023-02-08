@@ -2,25 +2,36 @@
 // use rocket_sync_db_pools::diesel::*;
 use diesel::prelude::*;
 // use rocket::serde::{Deserialize, Serialize};
+use crate::model::user::User;
 use crate::schema::drawings;
 use rocket::form::{self, Error};
 use rocket_sync_db_pools::diesel;
+use serde::Serialize;
 use std::time::SystemTime;
 // type Result<T, E = Debug<diesel::result::Error>> = std::result::Result<T, E>;
-#[derive(Debug, Queryable)]
+#[derive(Debug, Associations, Identifiable, Queryable, Serialize)]
+#[belongs_to(User)]
 pub struct Drawing {
     id: i32,
     pub points: String,
     created_at: SystemTime,
     updated_at: SystemTime,
+    user_id: i32,
 }
-#[derive(Insertable, FromForm)]
-#[table_name = "drawings"]
-pub struct NewDrawing {
+impl Drawing {
+    pub fn user_drawings(
+        user: &User,
+        conn: &mut diesel::PgConnection,
+    ) -> QueryResult<Vec<Drawing>> {
+        Drawing::belonging_to(user).load(conn)
+    }
+}
+#[derive(FromForm)]
+pub struct DrawingForm<'a> {
     #[field(validate=check_points_format())]
-    pub points: String,
+    pub points: &'a str,
 }
-fn check_points_format<'v>(string: &String) -> form::Result<'v, ()> {
+fn check_points_format<'v>(string: &str) -> form::Result<'v, ()> {
     let res = serde_json::from_str::<Vec<Vec<[i32; 2]>>>(string);
     res.map_or(
         Err(Error::validation("Invalid points").into()),
@@ -40,5 +51,19 @@ impl NewDrawing {
         diesel::insert_into(drawings::table)
             .values(self)
             .execute(conn)
+    }
+}
+#[derive(Insertable)]
+#[table_name = "drawings"]
+pub struct NewDrawing {
+    points: String,
+    user_id: i32,
+}
+impl<'a> DrawingForm<'a> {
+    pub fn get_new_drawing(&self, user_id: i32) -> NewDrawing {
+        NewDrawing {
+            points: self.points.to_owned(),
+            user_id,
+        }
     }
 }

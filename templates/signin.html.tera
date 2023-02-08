@@ -4,11 +4,9 @@ Signup
 {% endblock title %}
 {% block body %}
 
-<a href="/users/signin"> SignIn</a>
+<a href="/users/signup"> SignUp</a>
 {# {% endif %} #}
-<form method="post" action="/users/create">
-    <label for="username">Name:</label><br>
-    <input type="text" id="username" name="username"><br>
+<form method="post" action="/users/session">
     <label for="email">Email:</label><br>
     <input type="email" id="email" name="email"><br>
     <label for="password">Password:</label><br>
