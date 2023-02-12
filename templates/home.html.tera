@@ -1,12 +1,30 @@
 {% extends "base" %}
+
 {% block title %}
 Home
 {% endblock title %}
 {% block script %}
-<script src="static/main.js"></script>
+<script src="/static/dist/main.js"></script>
 
 {% endblock script %}
-{% block body %}
+{% block left_col %}
+{% if current_user %}
+{{ macros::user_badge(user = current_user) }}
+{% elif user %}
+{{ macros::user_badge(user = user ) }}
+{% else %}
+<div class="badge-welcome-container">
+    <div class="badge-welcome-header">Welcome to Doodle Book</div>
+    <div class="badge-welcome-subheader">A place to be creative</div>
+    <div class="badge-welcome-buttons">
+        <a href="#" class="badge-welcome-button">Sign Up</a>
+        <a href="#" class="badge-welcome-button">Sign In</a>
+    </div>
+</div>
+
+{% endif %}
+{% endblock left_col %}
+{% block center %}
 
 {# {% if flash is defined %} #}
 <a href="/users/signup"> Signup</a>
@@ -17,9 +35,12 @@ Home
 </form>
 
 {# {% endif %} #}
+<div id="canvas-form-div">
+    <canvas id="drawing-canvas"></canvas>
+</div>
 <form method="post" action="/create" id="canvas-form">
     <input type="hidden" id="points" name="points"><br>
     <input type="button" id="canvas-clear" value="Clear">
     <input type="button" id="canvas-button" value="Submit">
 </form>
-{% endblock body %}
+{% endblock center %}

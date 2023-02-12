@@ -15,15 +15,24 @@ pub struct Drawing {
 pub fn start() -> Result<(), JsValue> {
     let drawing = Drawing::default();
     let document = web_sys::window().unwrap().document().unwrap();
+    let canvas_div = document.get_element_by_id("canvas-form-div").unwrap();
+    let width = canvas_div
+        .dyn_into::<web_sys::HtmlElement>()?
+        .offset_width() as f32;
+    // web_sys::console::log_1(&width.into()) as f32;
+    let canvas_width = width * 0.7;
     let canvas = document
-        .create_element("canvas")?
+        .get_element_by_id("drawing-canvas")
+        .unwrap()
         .dyn_into::<web_sys::HtmlCanvasElement>()?;
-    document.body().unwrap().append_child(&canvas)?;
-    let width = CANVAS_WIDTH;
-    let height = CANVAS_HEIGHT;
-    canvas.set_width(width);
+    // document.body().unwrap().append_child(&canvas)?;
+    // let width = CANVAS_WIDTH;
+    // let height = CANVAS_HEIGHT;
+    canvas.set_width(canvas_width as u32);
+    let height = (canvas_width as f32 * 0.75) as u32;
     canvas.set_height(height);
-    canvas.style().set_property("border", "solid")?;
+    // canvas.set_height(height);
+    // canvas.style().set_property("border", "solid")?;
     let context = canvas
         .get_context("2d")?
         .unwrap()

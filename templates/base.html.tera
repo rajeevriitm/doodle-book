@@ -1,23 +1,58 @@
+{% import "macros" as macros %}
+
 <!DOCTYPE html>
 <html>
-<title>Doodle Book |
-    {% block title %}
-    Welcome
-    {% endblock title %}
-</title>
-{% block script %}
 
-{% endblock script %}
+<head>
+    <link rel="stylesheet" href="/static/style.css">
+    <title>Doodle Book |
+        {% block title %}
+        Welcome
+        {% endblock title %}
+    </title>
+    {% block script %}{% endblock script %}
+    <script>
+        function closeFlash(event) {
+            console.log(event);
+            event.target.parentElement.style.display = "none";
+        }
+    </script>
+</head>
 
 <body>
+    <header>
+        <a href="/" class="logo-title">Doodle Book</a>
+        {% if current_user %}
+        <form method="post" action="/users/signout">
+            <input type="submit" value="Signout" class="signin-btn">
+        </form>
+        {% else %}
+        {{ macros::link_to(link="/users/signin",text="SiginIn" , class="signin-btn") }}
+
+        {% endif %}
+        {# <a href="#" class="signin-btn">Sign In</a> #}
+    </header>
     {% if flash %}
-
-    {{ flash.1 }}
-
+    <div class="message">
+        <div> {{ flash.1 }} </div>
+        <span class="close" onclick="closeFlash(event)">&times;</span>
+    </div>
     {% endif %}
-    {% block body %}
 
-    {% endblock body %}
+    <div class="container">
+        <div class="col-left">
+            {% block left_col %}
+
+            {% endblock left_col %}
+        </div>
+        <div class="col-centre">
+            {% block center %}
+            {% endblock center %}
+        </div>
+        <div class="col-right">
+            Column 3
+        </div>
+    </div>
     {# {% if flash is defined %} #}
 </body>
 

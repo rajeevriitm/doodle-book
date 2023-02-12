@@ -10,6 +10,8 @@ use rocket_dyn_templates::{context, Template};
 pub fn home(flash: Option<FlashMessage<'_>>) -> Template {
     // dbg!(config);
     let flash = flash.map(FlashMessage::into_inner);
+    let error = "Error occured".to_string();
+    let flash = Some((error.clone(), error));
     Template::render("home", context! {name: "Rajeev", flash})
 }
 #[get("/", rank = 1)]
@@ -21,13 +23,13 @@ pub async fn auth_home(
 ) -> Result<Template, Redirect> {
     let result = db
         .run(move |conn| {
-            let user = User::find(auth.user_id, conn)?;
-            let drawings = Drawing::user_drawings(&user, conn).unwrap_or(vec![]);
-            Ok::<_, diesel::result::Error>((user, drawings))
+            let current_user = User::find(auth.user_id, conn)?;
+            let drawings = Drawing::user_drawings(&current_user, conn).unwrap_or(vec![]);
+            Ok::<_, diesel::result::Error>((current_user, drawings))
         })
         .await;
     result
-        .map(|(user, drawings)| Template::render("home", context! {user,drawings}))
+        .map(|(current_user, drawings)| Template::render("home", context! {current_user,drawings}))
         .map_err(|_| {
             cookie_jar.remove_private(Cookie::named("user_id"));
             Redirect::to("/")

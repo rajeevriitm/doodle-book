@@ -11,7 +11,7 @@ use rocket::{fairing::AdHoc, State};
 use rocket_dyn_templates::Template;
 use rocket_sync_db_pools::database;
 use routes::drawings_route::save_drawing;
-use routes::profile_route::{home,auth_home,user_profile};
+use routes::profile_route::{auth_home, home, user_profile};
 use routes::users_route::{
     authenticated_signin, authenticated_signup, create_session, create_user, signin, signout,
     signup,
@@ -26,7 +26,7 @@ pub struct Configuration {
 #[launch]
 fn rocket() -> _ {
     rocket::build()
-        .mount("/", routes![home, save_drawing,user_profile])
+        .mount("/", routes![home, save_drawing, user_profile, auth_home])
         .mount(
             "/users",
             routes![
@@ -42,5 +42,5 @@ fn rocket() -> _ {
         .attach(Template::fairing())
         .attach(Db::fairing())
         .attach(AdHoc::config::<Configuration>())
-        .mount("/static", FileServer::from(relative!("assets/dist/")))
+        .mount("/static", FileServer::from(relative!("assets/static/")))
 }

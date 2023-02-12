@@ -1,0 +1,10 @@
+{% macro user_badge(user) %}
+<div class="user-badge-container">
+    <div class="user-badge-name">
+        {{ user.username }}
+    </div>
+</div>
+{% endmacro input %}
+{% macro link_to(text,link,class="") %}
+<a href="{{link}}" class="{{class}}">{{ text }}</a>
+{% endmacro %}

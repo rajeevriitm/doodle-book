@@ -1,0 +1,136 @@
+.container {
+    display: grid;
+    grid-template-columns: 26% 45% 24%;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 20px 10px;
+}
+
+.col-left {
+    grid-column: 1 / 2;
+    /* text-align: center; */
+}
+
+.col-centre {
+    grid-column: 2 / 3;
+    /* border: 2px red solid; */
+    /* text-align: center; */
+}
+
+.col-right {
+    grid-column: 3 / 4;
+    /* text-align: center; */
+}
+
+#drawing-canvas {
+    border: 1px red solid;
+    border-radius: 10px;
+    ;
+}
+
+#canvas-form-div {
+    text-align: center;
+    width: 100%;
+}
+
+header {
+    background-color: #C0C0C0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 50px;
+}
+
+.logo-title {
+    margin: auto;
+    text-decoration: none;
+    font-size: 32px;
+    font-weight: 600;
+    color: royalblue;
+}
+
+body {
+    margin: 0;
+}
+
+.signin-btn {
+    background-color: #336699;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+    font-size: 16px;
+}
+
+.message {
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+
+.close {
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.user-badge-container {
+    background-color: lightgray;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    margin: 20px;
+}
+
+.user-badge-name {
+    text-align: left;
+    margin-top: 10px;
+}
+
+.badge-welcome-container {
+    text-align: center;
+}
+
+.badge-welcome-header {
+    font-size: 18px;
+}
+
+.badge-welcome-subheader {
+    font-size: 14px;
+}
+
+.badge-welcome-buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.badge-welcome-button {
+    padding: 10px 20px;
+    margin: 10px;
+    background-color: #eee;
+    text-decoration: none;
+    color: black;
+}
+
+.logout-header-btn {
+    border: none;
+    background-color: blue;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+}

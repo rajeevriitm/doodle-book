@@ -2,7 +2,7 @@
 {% block title %}
 Signup
 {% endblock title %}
-{% block body %}
+{% block center %}
 
 <a href="/users/signup"> SignUp</a>
 {# {% endif %} #}
@@ -14,4 +14,4 @@ Signup
     <input type="submit" id="submit-button" value="Submit">
 
 </form>
-{% endblock body %}
+{% endblock center %}
