@@ -1,0 +1,10 @@
+{% for drawing in drawings %}
+<div class="drawing-list-item" data-points="{{ drawing.points }}" data-width="{{drawing.width}}"></div>
+
+{% endfor %}
+<script>
+    wasmImport.then((wasm) => {
+        wasm.create_canvas_drawing();
+    });
+
+</script>

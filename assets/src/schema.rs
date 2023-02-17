@@ -2,8 +2,10 @@ table! {
     drawings (id) {
         id -> Int4,
         points -> Text,
+        width -> Int4,
         created_at -> Timestamp,
         updated_at -> Timestamp,
+        user_id -> Int4,
     }
 }
 
@@ -15,6 +17,8 @@ table! {
         password -> Varchar,
     }
 }
+
+joinable!(drawings -> users (user_id));
 
 allow_tables_to_appear_in_same_query!(
     drawings,

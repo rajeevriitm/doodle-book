@@ -26,10 +26,11 @@
 #drawing-canvas {
     border: 1px red solid;
     border-radius: 10px;
-    ;
+
 }
 
-#canvas-form-div {
+#canvas-form-div,
+.drawing-list-item {
     text-align: center;
     width: 100%;
 }
@@ -133,4 +134,9 @@ body {
     text-align: center;
     cursor: pointer;
     text-decoration: none;
+}
+
+.drawing-list-item .drawing-canvas-item {
+    border: 1px red solid;
+    border-radius: 10px;
 }

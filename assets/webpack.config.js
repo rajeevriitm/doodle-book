@@ -4,6 +4,7 @@ const webpack = require('webpack');
 const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
 // const CopyPlugin = require("copy-webpack-plugin");
 module.exports = {
+    mode: 'development',
     entry: './hello.js',
     output: {
         filename: 'main.js',
@@ -26,5 +27,6 @@ module.exports = {
     ],
     experiments: {
         asyncWebAssembly: true,
+        topLevelAwait: true
     }
 };

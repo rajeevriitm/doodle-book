@@ -1,0 +1,15 @@
+{# {% endif %} #}
+<div id="canvas-form-div">
+    {# <canvas id="drawing-canvas"></canvas> #}
+</div>
+<form method="post" action="/create" id="canvas-form">
+    <input type="hidden" id="points" name="points"><br>
+    <input type="hidden" id="canvas-form-width" name="width"><br>
+    <input type="button" id="canvas-clear" value="Clear">
+    <input type="button" id="canvas-button" value="Submit">
+</form>
+<script>
+    wasmImport.then((wasm) => {
+        wasm.create_canvas_form();
+    });
+</script>

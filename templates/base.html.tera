@@ -1,4 +1,4 @@
-{% import "macros" as macros %}
+{% import "partials/macros" as macros %}
 
 <!DOCTYPE html>
 <html>
@@ -50,7 +50,6 @@
             {% endblock center %}
         </div>
         <div class="col-right">
-            Column 3
         </div>
     </div>
     {# {% if flash is defined %} #}

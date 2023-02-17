@@ -1,17 +1,9 @@
 {% extends "base" %}
 
-{% block title %}
-Home
-{% endblock title %}
 {% block script %}
 <script src="./static/dist/main.js"></script>
 {% endblock script %}
 {% block left_col %}
-{% if current_user %}
-{{ macros::user_badge(user = current_user) }}
-{% elif user %}
-{{ macros::user_badge(user = user ) }}
-{% else %}
 <div class="badge-welcome-container">
     <div class="badge-welcome-header">Welcome to Doodle Book</div>
     <div class="badge-welcome-subheader">A place to be creative</div>
@@ -21,15 +13,7 @@ Home
     </div>
 </div>
 
-{% endif %}
 {% endblock left_col %}
 {% block center %}
 {% include "partials/drawings_list" %}
-{# {% if flash is defined %} #}
-<a href="/users/signup"> Signup</a>
-<a href="/users/signin"> SignIn</a>
-<form method="post" action="/users/signout" id="signout">
-    <input type="submit" id="signout-button" value="Signout">
-</form>
-{% include "partials/canvas_form" %}
 {% endblock center %}

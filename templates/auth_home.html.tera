@@ -1,0 +1,15 @@
+{% extends "base" %}
+
+{% block title %}
+Home
+{% endblock title %}
+{% block script %}
+<script src="./static/dist/main.js"></script>
+{% endblock script %}
+{% block left_col %}
+{{ macros::user_badge(user = current_user) }}
+{% endblock left_col %}
+{% block center %}
+{% include "partials/canvas_form" %}
+{% include "partials/drawings_list" %}
+{% endblock center %}

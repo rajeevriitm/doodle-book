@@ -1,0 +1,14 @@
+{% extends "base" %}
+
+{% block title %}
+{{ user.username }}
+{% endblock title %}
+{% block script %}
+<script src="./static/dist/main.js"></script>
+{% endblock script %}
+{% block left_col %}
+{{ macros::user_badge(user = user ) }}
+{% endblock left_col %}
+{% block center %}
+{% include "partials/drawings_list" %}
+{% endblock center %}
