@@ -21,6 +21,7 @@ pub struct User {
     username: String,
     email: String,
     password: String,
+    profile_pic: Option<String>,
 }
 impl User {
     pub fn find(id: i32, conn: &mut diesel::PgConnection) -> QueryResult<User> {

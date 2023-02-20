@@ -1,0 +1,9 @@
+<div class="user-badge-container">
+    <div class="user-badge-name">
+        {{ user.username }}
+    </div>
+    {% if current_user_id and current_user_id == user.id %}
+
+    {{ macros::link_to(text="Edit",link="/users/edit")}}
+    {% endif %}
+</div>

@@ -1,6 +1,13 @@
 {% for drawing in drawings %}
 <div class="drawing-list-item" data-points="{{ drawing.points }}" data-width="{{drawing.width}}"></div>
-
+{% if current_user_id and current_user_id == drawing.user_id %}
+<div>
+    <form action="/delete_drawing/{{drawing.id}}" method="post">
+        <input type="hidden" name="_method" value="delete" />
+        <button type="submit">Delete</button>
+    </form>
+</div>
+{% endif %}
 {% endfor %}
 <script>
     wasmImport.then((wasm) => {

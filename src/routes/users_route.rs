@@ -8,6 +8,16 @@ use rocket::request::FlashMessage;
 use rocket::response::{Flash, Redirect};
 use rocket::State;
 use rocket_dyn_templates::{context, Template};
+#[get("/edit")]
+pub async fn edit_profile(auth: AuthInfo, db: Db) -> Result<Template, Redirect> {
+    let user = db
+        .run(move |conn| User::find(auth.user_id, conn).or(Err(Redirect::to("/"))))
+        .await?;
+    Ok(Template::render(
+        "user_edit",
+        context![current_user_id: user.id,user],
+    ))
+}
 #[get("/signup", rank = 1)]
 pub fn authenticated_signup(_user: AuthInfo) -> Redirect {
     Redirect::to("/")
@@ -48,7 +58,6 @@ pub async fn create_session(
             } else {
                 return Err(render_template("signin", "Incorrect password"));
             }
-            // todo!()
         }
         None => Err(Template::render(
             "signin",

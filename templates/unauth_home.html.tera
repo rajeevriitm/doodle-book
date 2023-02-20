@@ -1,7 +1,7 @@
 {% extends "base" %}
 
 {% block script %}
-<script src="./static/dist/main.js"></script>
+<script src="/static/dist/main.js"></script>
 {% endblock script %}
 {% block left_col %}
 <div class="badge-welcome-container">

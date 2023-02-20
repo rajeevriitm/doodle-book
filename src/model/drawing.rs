@@ -17,7 +17,7 @@ pub struct Drawing {
     width: i32,
     created_at: SystemTime,
     updated_at: SystemTime,
-    user_id: i32,
+    pub user_id: i32,
 }
 impl Drawing {
     pub fn user_drawings(
@@ -25,6 +25,14 @@ impl Drawing {
         conn: &mut diesel::PgConnection,
     ) -> QueryResult<Vec<Drawing>> {
         Drawing::belonging_to(user).load(conn)
+    }
+    pub fn find_drawing(id: i32, conn: &mut diesel::PgConnection) -> QueryResult<Drawing> {
+        drawings::table.find(id).first(conn)
+    }
+    pub fn delete_drawing(id: i32, conn: &mut diesel::PgConnection) -> QueryResult<usize> {
+        diesel::delete(drawings::table)
+            .filter(drawings::id.eq(id))
+            .execute(conn)
     }
 }
 #[derive(FromForm)]

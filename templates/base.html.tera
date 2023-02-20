@@ -1,5 +1,4 @@
 {% import "partials/macros" as macros %}
-
 <!DOCTYPE html>
 <html>
 
@@ -22,7 +21,7 @@
 <body>
     <header>
         <a href="/" class="logo-title">Doodle Book</a>
-        {% if current_user %}
+        {% if current_user_id %}
         <form method="post" action="/users/signout">
             <input type="submit" value="Signout" class="signin-btn">
         </form>

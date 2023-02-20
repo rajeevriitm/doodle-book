@@ -1,13 +1,17 @@
 {% extends "base" %}
+{% set method = "post" %}
+{% set action = "/create" %}
+
 
 {% block title %}
 Home
 {% endblock title %}
 {% block script %}
-<script src="./static/dist/main.js"></script>
+<script src="/static/dist/main.js"></script>
 {% endblock script %}
 {% block left_col %}
-{{ macros::user_badge(user = current_user) }}
+{% include "partials/user_badge" %}
+{# {{ macros::user_badge(user = user) }} #}
 {% endblock left_col %}
 {% block center %}
 {% include "partials/canvas_form" %}

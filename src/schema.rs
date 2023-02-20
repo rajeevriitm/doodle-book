@@ -15,6 +15,7 @@ table! {
         username -> Varchar,
         email -> Varchar,
         password -> Varchar,
+        profile_pic -> Nullable<Text>,
     }
 }
 
