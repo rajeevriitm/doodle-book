@@ -23,6 +23,12 @@ pub struct User {
     password: String,
     profile_pic: Option<String>,
 }
+#[derive(AsChangeset, FromForm)]
+#[table_name = "users"]
+pub struct UserUpdateForm {
+    username: String,
+    profile_pic: Option<String>,
+}
 impl User {
     pub fn find(id: i32, conn: &mut diesel::PgConnection) -> QueryResult<User> {
         users::table.find(id).first(conn)
@@ -36,6 +42,13 @@ impl User {
     pub fn verify_password(&self, password: &str) -> Result<(), argon2::password_hash::Error> {
         let hash = argon2::password_hash::PasswordHash::new(&self.password)?;
         argon2::Argon2::default().verify_password(password.as_bytes(), &hash)
+    }
+}
+impl UserUpdateForm {
+    pub fn update_user(&self, id: i32, conn: &mut diesel::PgConnection) -> QueryResult<usize> {
+        diesel::update(users::table.find(id))
+            .set(self)
+            .execute(conn)
     }
 }
 impl UserForm {

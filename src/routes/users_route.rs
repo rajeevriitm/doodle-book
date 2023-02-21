@@ -1,8 +1,10 @@
-use crate::model::user::{User, UserForm};
+use crate::model::user::{User, UserForm, UserUpdateForm};
+use crate::routes::profile_route;
 use crate::routes::AuthInfo;
 use crate::Configuration;
 use crate::Db;
 use rocket::form::{Contextual, Form};
+use rocket::futures::FutureExt;
 use rocket::http::{Cookie, CookieJar};
 use rocket::request::FlashMessage;
 use rocket::response::{Flash, Redirect};
@@ -15,8 +17,20 @@ pub async fn edit_profile(auth: AuthInfo, db: Db) -> Result<Template, Redirect> 
         .await?;
     Ok(Template::render(
         "user_edit",
-        context![current_user_id: user.id,user],
+        context![current_user_id: user.id,user,canvas_form: "user"],
     ))
+}
+#[put("/update", data = "<form>")]
+pub async fn update_user(db: Db, auth: AuthInfo, form: Form<UserUpdateForm>) -> Flash<Redirect> {
+    let redirect = Redirect::to(uri!(profile_route::user_profile(id = auth.user_id)));
+    let result = db
+        .run(move |conn| form.update_user(auth.user_id, conn))
+        .await;
+    if result.is_ok() {
+        Flash::success(redirect, "Succesfully updated")
+    } else {
+        Flash::error(redirect, "Error occured")
+    }
 }
 #[get("/signup", rank = 1)]
 pub fn authenticated_signup(_user: AuthInfo) -> Redirect {

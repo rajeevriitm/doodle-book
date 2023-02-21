@@ -1,8 +1,15 @@
-{# {% endif %} #}
+{% if canvas_form == "drawing" %}
+{% set method = "post" %}
+{% set action = "/create" %}
+{% elif canvas_form == "user" %}
+{% set method = "put" %}
+{% set action = "/users/update" %}
+{% endif %}
+
 <div id="canvas-form-div">
     {# <canvas id="drawing-canvas"></canvas> #}
 </div>
-<form method="{{method}}" action="{{action}}" id="canvas-form">
+<form method={{method}} action={{action}} id="canvas-form">
     <input type="hidden" id="points" name="points"><br>
     <input type="hidden" id="canvas-form-width" name="width"><br>
     <input type="button" id="canvas-clear" value="Clear">

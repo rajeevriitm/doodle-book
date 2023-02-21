@@ -40,7 +40,7 @@ pub async fn auth_home(
         .map(|(user, drawings)| {
             Template::render(
                 "auth_home",
-                context! {current_user_id: user.id,user,drawings,flash,},
+                context! {current_user_id: user.id,user,drawings,flash,canvas_form: "drawing"},
             )
         })
         .map_err(|_| {
@@ -49,7 +49,13 @@ pub async fn auth_home(
         })
 }
 #[get("/user/<id>")]
-pub async fn user_profile(db: Db, id: i32, auth: Option<AuthInfo>) -> Result<Template, Redirect> {
+pub async fn user_profile(
+    db: Db,
+    id: i32,
+    auth: Option<AuthInfo>,
+    flash: Option<FlashMessage<'_>>,
+) -> Result<Template, Redirect> {
+    let flash = flash.map(FlashMessage::into_inner);
     let current_user_id = auth.map(|auth| auth.user_id);
     let result = db
         .run(move |conn| {
@@ -59,6 +65,8 @@ pub async fn user_profile(db: Db, id: i32, auth: Option<AuthInfo>) -> Result<Tem
         })
         .await;
     result
-        .map(|(user, drawings)| Template::render("user", context! {user,drawings,current_user_id}))
+        .map(|(user, drawings)| {
+            Template::render("user", context! {flash,user,drawings,current_user_id})
+        })
         .map_err(|_| Redirect::to("/"))
 }
