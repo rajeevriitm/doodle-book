@@ -14,7 +14,7 @@ use routes::drawings_route::{delete_drawing, save_drawing};
 use routes::profile_route::{auth_home, unauth_home, user_profile};
 use routes::users_route::{
     authenticated_signin, authenticated_signup, create_session, create_user, edit_profile, signin,
-    signout, signup,
+    signout, signup, update_user,
 };
 #[database("doodles")]
 pub struct Db(diesel::PgConnection);
@@ -46,7 +46,8 @@ fn rocket() -> _ {
                 authenticated_signin,
                 authenticated_signup,
                 signout,
-                edit_profile
+                edit_profile,
+                update_user
             ],
         )
         .attach(Template::fairing())

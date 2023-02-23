@@ -1,6 +1,4 @@
 {% extends "base" %}
-{% set method = "post" %}
-{% set action = "/create" %}
 
 
 {% block title %}
@@ -14,6 +12,6 @@ Home
 {# {{ macros::user_badge(user = user) }} #}
 {% endblock left_col %}
 {% block center %}
-{% include "partials/canvas_form" %}
+{% include "partials/canvas_doodle_form" %}
 {% include "partials/drawings_list" %}
 {% endblock center %}

@@ -1,7 +1,6 @@
 use crate::schema::users;
 use argon2::{PasswordHasher, PasswordVerifier};
 use diesel::prelude::*;
-use rocket::form::validate;
 use rocket_sync_db_pools::diesel;
 use serde::Serialize;
 
@@ -22,12 +21,16 @@ pub struct User {
     email: String,
     password: String,
     profile_pic: Option<String>,
+    profile_pic_width: Option<i32>,
 }
-#[derive(AsChangeset, FromForm)]
+#[derive(AsChangeset, FromForm, Debug)]
 #[table_name = "users"]
 pub struct UserUpdateForm {
     username: String,
-    profile_pic: Option<String>,
+    #[field(name = "points")]
+    pub profile_pic: Option<String>,
+    #[field(name = "width")]
+    pub profile_pic_width: Option<i32>,
 }
 impl User {
     pub fn find(id: i32, conn: &mut diesel::PgConnection) -> QueryResult<User> {

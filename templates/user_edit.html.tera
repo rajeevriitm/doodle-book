@@ -7,5 +7,5 @@ Edit
 <script src="/static/dist/main.js"></script>
 {% endblock script %}
 {% block center %}
-{% include "partials/canvas_form" %}
+{% include "partials/canvas_user_form" %}
 {% endblock center %}

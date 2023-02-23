@@ -2,4 +2,5 @@
 doodles = { url = "postgres://raj:iitm@localhost:5432/doodles" }
 [debug]
 password_salt = "saltdfhdlifjlidsjlslvjsjdhiosdisosiijifhdoij"
+secret_key = "tQasUqto0SqOKLprGhL69QOpSUFRqyq1KuG/aDOW6LA="
 # PASSWORD_SALT = "salt"

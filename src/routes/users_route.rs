@@ -21,7 +21,19 @@ pub async fn edit_profile(auth: AuthInfo, db: Db) -> Result<Template, Redirect> 
     ))
 }
 #[put("/update", data = "<form>")]
-pub async fn update_user(db: Db, auth: AuthInfo, form: Form<UserUpdateForm>) -> Flash<Redirect> {
+pub async fn update_user(
+    db: Db,
+    auth: AuthInfo,
+    mut form: Form<UserUpdateForm>,
+) -> Flash<Redirect> {
+    // dbg!(&form);
+    if let Some(points) = &form.profile_pic {
+        let points = serde_json::from_str::<Vec<Vec<[i32; 2]>>>(points).unwrap();
+        if points.len() == 0 {
+            form.profile_pic = None;
+            form.profile_pic_width = None;
+        }
+    }
     let redirect = Redirect::to(uri!(profile_route::user_profile(id = auth.user_id)));
     let result = db
         .run(move |conn| form.update_user(auth.user_id, conn))

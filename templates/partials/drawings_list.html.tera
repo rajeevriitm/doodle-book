@@ -1,5 +1,5 @@
 {% for drawing in drawings %}
-<div class="drawing-list-item" data-points="{{ drawing.points }}" data-width="{{drawing.width}}"></div>
+<div class="drawing-list-item wasm-canvas-div" data-points="{{ drawing.points }}" data-width="{{drawing.width}}"></div>
 {% if current_user_id and current_user_id == drawing.user_id %}
 <div>
     <form action="/delete_drawing/{{drawing.id}}" method="post">
@@ -11,7 +11,7 @@
 {% endfor %}
 <script>
     wasmImport.then((wasm) => {
-        wasm.create_canvas_drawing();
+        wasm.create_canvas_drawing("drawing-list-item");
     });
 
 </script>

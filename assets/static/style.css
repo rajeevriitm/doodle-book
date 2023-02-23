@@ -136,7 +136,11 @@ body {
     text-decoration: none;
 }
 
-.drawing-list-item .drawing-canvas-item {
+.drawing-list-item .wasm-added-canvas {
     border: 1px red solid;
     border-radius: 10px;
+}
+
+.user-badge-canvas-div {
+    width: 100%;
 }

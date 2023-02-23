@@ -1,4 +1,6 @@
 <div class="user-badge-container">
+    <div class="wasm-canvas-div user-badge-canvas-div" data-points="{{ user.profile_pic }}"
+        data-width="{{user.profile_pic_width}}"> </div>
     <div class="user-badge-name">
         {{ user.username }}
     </div>
@@ -7,3 +9,9 @@
     {{ macros::link_to(text="Edit",link="/users/edit")}}
     {% endif %}
 </div>
+<script>
+    wasmImport.then((wasm) => {
+        wasm.create_canvas_drawing("user-badge-canvas-div");
+    });
+
+</script>
