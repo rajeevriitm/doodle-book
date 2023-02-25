@@ -1,4 +1,4 @@
-use crate::model::user;
+use crate::model::{drawing, user};
 use crate::model::{drawing::Drawing, user::User};
 use crate::routes::AuthInfo;
 use crate::schema::drawings;
@@ -11,15 +11,15 @@ use rocket_dyn_templates::{context, Template};
 pub async fn unauth_home(flash: Option<FlashMessage<'_>>, db: Db) -> Template {
     // dbg!(config);
     let flash = flash.map(FlashMessage::into_inner);
-    let drawings = db
+    let user_drawings = db
         .run(move |conn| {
             let admin = User::find(1, conn)?;
-            let drawings = Drawing::user_drawings(&admin, conn).unwrap_or(vec![]);
-            Ok::<_, diesel::result::Error>(drawings)
+            let user_drawings = Drawing::home(&admin, conn).unwrap_or(vec![]);
+            Ok::<_, diesel::result::Error>(user_drawings)
         })
         .await
         .unwrap();
-    Template::render("unauth_home", context! {drawings, flash})
+    Template::render("unauth_home", context! {user_drawings, flash})
 }
 #[get("/", rank = 1)]
 pub async fn auth_home(
@@ -32,15 +32,15 @@ pub async fn auth_home(
     let result = db
         .run(move |conn| {
             let current_user = User::find(auth.user_id, conn)?;
-            let drawings = Drawing::user_drawings(&current_user, conn).unwrap_or(vec![]);
+            let drawings = Drawing::home(&current_user, conn).unwrap_or(vec![]);
             Ok::<_, diesel::result::Error>((current_user, drawings))
         })
         .await;
     result
-        .map(|(user, drawings)| {
+        .map(|(user, user_drawings)| {
             Template::render(
                 "auth_home",
-                context! {current_user_id: user.id,user,drawings,flash,canvas_form: "drawing"},
+                context! {current_user_id: user.id,user,user_drawings,flash},
             )
         })
         .map_err(|_| {
@@ -61,12 +61,16 @@ pub async fn user_profile(
         .run(move |conn| {
             let user = User::find(id, conn)?;
             let drawings = Drawing::user_drawings(&user, conn).unwrap_or(vec![]);
-            Ok::<_, diesel::result::Error>((user, drawings))
+            let user_drawings = drawings
+                .into_iter()
+                .map(|drawing| (user.clone(), drawing))
+                .collect::<Vec<(User, Drawing)>>();
+            Ok::<_, diesel::result::Error>((user, user_drawings))
         })
         .await;
     result
-        .map(|(user, drawings)| {
-            Template::render("user", context! {flash,user,drawings,current_user_id})
+        .map(|(user, user_drawings)| {
+            Template::render("user", context! {flash,user,user_drawings,current_user_id})
         })
         .map_err(|_| Redirect::to("/"))
 }

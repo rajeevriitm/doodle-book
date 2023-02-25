@@ -4,7 +4,6 @@ use crate::routes::AuthInfo;
 use crate::Configuration;
 use crate::Db;
 use rocket::form::{Contextual, Form};
-use rocket::futures::FutureExt;
 use rocket::http::{Cookie, CookieJar};
 use rocket::request::FlashMessage;
 use rocket::response::{Flash, Redirect};
@@ -17,7 +16,7 @@ pub async fn edit_profile(auth: AuthInfo, db: Db) -> Result<Template, Redirect> 
         .await?;
     Ok(Template::render(
         "user_edit",
-        context![current_user_id: user.id,user,canvas_form: "user"],
+        context![current_user_id: user.id,user],
     ))
 }
 #[put("/update", data = "<form>")]

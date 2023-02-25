@@ -1,5 +1,7 @@
-<div id="canvas-form-div">
-    {# <canvas id="drawing-canvas"></canvas> #}
+<div class="canvas-form-div-container">
+
+    <div id="canvas-form-div">
+    </div>
 </div>
 <form method="post" action="/create" id="canvas-form">
     <input type="hidden" id="points" name="points" value="[]"><br>

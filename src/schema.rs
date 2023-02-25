@@ -4,7 +4,6 @@ table! {
         points -> Text,
         width -> Int4,
         created_at -> Timestamp,
-        updated_at -> Timestamp,
         user_id -> Int4,
     }
 }

@@ -144,3 +144,20 @@ body {
 .user-badge-canvas-div {
     width: 100%;
 }
+
+/* .canvas-form-div-container {
+    width: 90%;
+} */
+
+.drawing-list-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.drawing-list-container .drawing-list-user-container {
+    width: 20%;
+}
+
+.drawing-list-container .drawing-list-item-container {
+    width: 75%;
+}

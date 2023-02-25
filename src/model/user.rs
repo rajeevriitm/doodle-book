@@ -14,7 +14,7 @@ pub struct UserForm {
     #[field(validate=len(2..))]
     pub password: String,
 }
-#[derive(FromForm, Debug, Queryable, Identifiable, Serialize)]
+#[derive(FromForm, Debug, Queryable, Identifiable, Serialize, Clone)]
 pub struct User {
     pub id: i32,
     username: String,

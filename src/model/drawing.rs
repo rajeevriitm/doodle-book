@@ -3,7 +3,7 @@
 use diesel::prelude::*;
 // use rocket::serde::{Deserialize, Serialize};
 use crate::model::user::User;
-use crate::schema::drawings;
+use crate::schema::{drawings, users};
 use rocket::form::{self, Error};
 use rocket_sync_db_pools::diesel;
 use serde::Serialize;
@@ -16,7 +16,6 @@ pub struct Drawing {
     pub points: String,
     width: i32,
     created_at: SystemTime,
-    updated_at: SystemTime,
     pub user_id: i32,
 }
 impl Drawing {
@@ -24,7 +23,9 @@ impl Drawing {
         user: &User,
         conn: &mut diesel::PgConnection,
     ) -> QueryResult<Vec<Drawing>> {
-        Drawing::belonging_to(user).load(conn)
+        Drawing::belonging_to(user)
+            .order(drawings::created_at.desc())
+            .load(conn)
     }
     pub fn find_drawing(id: i32, conn: &mut diesel::PgConnection) -> QueryResult<Drawing> {
         drawings::table.find(id).first(conn)
@@ -33,6 +34,17 @@ impl Drawing {
         diesel::delete(drawings::table)
             .filter(drawings::id.eq(id))
             .execute(conn)
+    }
+    pub fn home(user: &User, conn: &mut diesel::PgConnection) -> QueryResult<Vec<(User, Drawing)>> {
+        users::table
+            .inner_join(drawings::table)
+            .filter(users::id.eq(user.id))
+            .order(drawings::created_at.desc())
+            .load(conn)
+        // let debug = diesel::debug_query::<diesel::pg::Pg, _>(&user_drawings);
+        // dbg!(debug);
+        // // .order(posts::created_at.asc());
+        // todo!()
     }
 }
 #[derive(FromForm)]
