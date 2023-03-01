@@ -9,12 +9,15 @@ use rocket::response::{Flash, Redirect};
 use rocket_dyn_templates::{context, Template};
 #[get("/", rank = 2)]
 pub async fn unauth_home(flash: Option<FlashMessage<'_>>, db: Db) -> Template {
-    // dbg!(config);
     let flash = flash.map(FlashMessage::into_inner);
     let user_drawings = db
         .run(move |conn| {
-            let admin = User::find(1, conn)?;
-            let user_drawings = Drawing::home(&admin, conn).unwrap_or(vec![]);
+            // let config = User::count(conn);
+            // dbg!(config);
+
+            let admin = User::find_first(conn)?;
+            let drawings = Drawing::user_drawings(&admin, conn).unwrap_or(vec![]);
+            let user_drawings = create_user_list(&admin, drawings);
             Ok::<_, diesel::result::Error>(user_drawings)
         })
         .await
@@ -61,10 +64,7 @@ pub async fn user_profile(
         .run(move |conn| {
             let user = User::find(id, conn)?;
             let drawings = Drawing::user_drawings(&user, conn).unwrap_or(vec![]);
-            let user_drawings = drawings
-                .into_iter()
-                .map(|drawing| (user.clone(), drawing))
-                .collect::<Vec<(User, Drawing)>>();
+            let user_drawings = create_user_list(&user, drawings);
             Ok::<_, diesel::result::Error>((user, user_drawings))
         })
         .await;
@@ -73,4 +73,10 @@ pub async fn user_profile(
             Template::render("user", context! {flash,user,user_drawings,current_user_id})
         })
         .map_err(|_| Redirect::to("/"))
+}
+fn create_user_list(user: &User, drawings: Vec<Drawing>) -> Vec<(User, Drawing)> {
+    drawings
+        .into_iter()
+        .map(|drawing| (user.clone(), drawing))
+        .collect::<Vec<(User, Drawing)>>()
 }

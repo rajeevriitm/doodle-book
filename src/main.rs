@@ -2,6 +2,8 @@
 extern crate rocket;
 #[macro_use]
 extern crate diesel;
+#[cfg(test)]
+mod test;
 use rocket::fs::{relative, FileServer};
 mod model;
 mod routes;

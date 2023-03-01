@@ -15,5 +15,7 @@ rocket_dyn_templates = { version = "0.1.0-rc.1", features = ["tera"] }
 rocket_sync_db_pools = { version = "0.1.0-rc.2", features = [
     "diesel_postgres_pool",
 ] }
+[dev-dependencies]
+dotenv = "0.15.0"
 [workspace]
 members = ["doodle-wasm"]

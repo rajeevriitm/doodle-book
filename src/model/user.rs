@@ -33,6 +33,12 @@ pub struct UserUpdateForm {
     pub profile_pic_width: Option<i32>,
 }
 impl User {
+    // pub fn count(conn: &mut diesel::PgConnection) -> i64 {
+    //     users::table.count().get_result(conn).unwrap()
+    // }
+    pub fn find_first(conn: &mut diesel::PgConnection) -> QueryResult<User> {
+        users::table.first(conn)
+    }
     pub fn find(id: i32, conn: &mut diesel::PgConnection) -> QueryResult<User> {
         users::table.find(id).first(conn)
     }
@@ -45,6 +51,10 @@ impl User {
     pub fn verify_password(&self, password: &str) -> Result<(), argon2::password_hash::Error> {
         let hash = argon2::password_hash::PasswordHash::new(&self.password)?;
         argon2::Argon2::default().verify_password(password.as_bytes(), &hash)
+    }
+    #[cfg(test)]
+    pub fn delete_all(conn: &mut diesel::PgConnection) {
+        diesel::delete(users::table).execute(conn).expect("delete");
     }
 }
 impl UserUpdateForm {

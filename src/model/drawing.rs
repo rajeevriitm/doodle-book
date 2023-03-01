@@ -41,10 +41,12 @@ impl Drawing {
             .filter(users::id.eq(user.id))
             .order(drawings::created_at.desc())
             .load(conn)
-        // let debug = diesel::debug_query::<diesel::pg::Pg, _>(&user_drawings);
-        // dbg!(debug);
-        // // .order(posts::created_at.asc());
-        // todo!()
+    }
+    #[cfg(test)]
+    pub fn delete_all(conn: &mut diesel::PgConnection) {
+        diesel::delete(drawings::table)
+            .execute(conn)
+            .expect("to delete");
     }
 }
 #[derive(FromForm)]
@@ -54,7 +56,9 @@ pub struct DrawingForm<'a> {
     width: i32,
 }
 fn check_points_format<'v>(string: &str) -> form::Result<'v, ()> {
+    dbg!(string);
     let res = serde_json::from_str::<Vec<Vec<[i32; 2]>>>(string);
+    dbg!(&res);
     res.map_or(
         Err(Error::validation("Invalid points").into()),
         |collection| {

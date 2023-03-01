@@ -3,4 +3,12 @@ doodles = { url = "postgres://raj:iitm@localhost:5432/doodles" }
 [debug]
 password_salt = "saltdfhdlifjlidsjlslvjsjdhiosdisosiijifhdoij"
 secret_key = "tQasUqto0SqOKLprGhL69QOpSUFRqyq1KuG/aDOW6LA="
+log_level = "debug"
 # PASSWORD_SALT = "salt"
+[test.databases]
+doodles = { url = "postgres://raj:iitm@localhost:5432/doodles_test" }
+[test]
+password_salt = "saltdfhdlifjlidsjlslvjsjdhiosdisosiijifhdoij"
+secret_key = "tQasUqto0SqOKLprGhL69QOpSUFRqyq1KuG/aDOW6LA="
+port = 8002
+log_level = "debug"

@@ -116,10 +116,7 @@ pub async fn create_user(
                             "Successfully Signed Up",
                         )
                     })
-                    .map_err(|err| {
-                        dbg!(err);
-                        render_template("signup", "Unable to save due to error occured")
-                    })
+                    .map_err(|err| render_template("signup", "Unable to save due to error occured"))
             })
             .await
         }
