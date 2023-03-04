@@ -4,7 +4,7 @@ use rocket::http::{ContentType, Status};
 use rocket::local::asynchronous;
 use std::sync::Mutex;
 static ITERATION: Mutex<usize> = Mutex::new(0);
-const TEST_USER: &str = "username=test&email=test@email&password=iitm";
+const TEST_USER: &str = "username=Doodler&email=test@email&password=iitm";
 #[test]
 fn signup_return_ok() {
     let client = rocket::local::blocking::Client::tracked(super::rocket()).unwrap();

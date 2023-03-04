@@ -23,10 +23,10 @@
         <a href="/" class="logo-title">Doodle Book</a>
         {% if current_user_id %}
         <form method="post" action="/users/signout">
-            <input type="submit" value="Signout" class="signin-btn">
+            <input type="submit" value="Signout" class="btn signout-btn">
         </form>
         {% else %}
-        {{ macros::link_to(link="/users/signin",text="SiginIn" , class="signin-btn") }}
+        {{ macros::link_to(link="/users/signin",text="SiginIn" , class="btn signin-btn") }}
 
         {% endif %}
         {# <a href="#" class="signin-btn">Sign In</a> #}

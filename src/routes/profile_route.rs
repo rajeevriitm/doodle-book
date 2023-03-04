@@ -15,7 +15,7 @@ pub async fn unauth_home(flash: Option<FlashMessage<'_>>, db: Db) -> Template {
             // let config = User::count(conn);
             // dbg!(config);
 
-            let admin = User::find_first(conn)?;
+            let admin = User::find_user_with_name("Doodler", conn)?;
             let drawings = Drawing::user_drawings(&admin, conn).unwrap_or(vec![]);
             let user_drawings = create_user_list(&admin, drawings);
             Ok::<_, diesel::result::Error>(user_drawings)

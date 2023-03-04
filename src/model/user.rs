@@ -36,8 +36,13 @@ impl User {
     // pub fn count(conn: &mut diesel::PgConnection) -> i64 {
     //     users::table.count().get_result(conn).unwrap()
     // }
-    pub fn find_first(conn: &mut diesel::PgConnection) -> QueryResult<User> {
-        users::table.first(conn)
+    pub fn find_user_with_name(
+        username: &str,
+        conn: &mut diesel::PgConnection,
+    ) -> QueryResult<User> {
+        users::table
+            .filter(users::username.eq(username))
+            .first(conn)
     }
     pub fn find(id: i32, conn: &mut diesel::PgConnection) -> QueryResult<User> {
         users::table.find(id).first(conn)

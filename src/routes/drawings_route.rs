@@ -13,6 +13,7 @@ pub async fn save_drawing(
     auth: AuthInfo,
 ) -> Result<Flash<Redirect>, String> {
     let drawing = drawing.get_new_drawing(auth.user_id);
+    dbg!(&drawing);
     db.run(move |conn| drawing.save_to_db(conn))
         .await
         .map(|_out| Flash::success(Redirect::to("/"), "Successfully drawn"))

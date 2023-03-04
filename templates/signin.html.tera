@@ -1,17 +1,23 @@
 {% extends "base" %}
 {% block title %}
-Signup
+Signin
 {% endblock title %}
 {% block center %}
+<div class="account-reg">
+    <div class="account-header">
+        <h1>Welcome back to Doodle Book</h1>
+    </div>
+    <form method="post" action="/users/session">
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password" required><br>
+        <input type="submit" id="submit-button" class="acc-button" value="Submit">
 
-<a href="/users/signup"> SignUp</a>
-{# {% endif %} #}
-<form method="post" action="/users/session">
-    <label for="email">Email:</label><br>
-    <input type="email" id="email" name="email"><br>
-    <label for="password">Password:</label><br>
-    <input type="password" id="password" name="password"><br>
-    <input type="submit" id="submit-button" value="Submit">
+    </form>
+    <div class="login-acc">
+        <p>If you dont have an account, please <a href="/users/signup">signup</a>.</p>
+    </div>
+</div>
 
-</form>
 {% endblock center %}

@@ -9,8 +9,10 @@ use wasm_bindgen::JsCast;
 use web_sys::Element;
 use web_sys::HtmlCanvasElement;
 use web_sys::HtmlElement;
+mod default_drawing;
 const CANVAS_WIDTH_RATIO: f32 = 1.0;
 const CANVAS_WIDTH_HEIGHT_RATIO: f32 = 0.75;
+const DEFAULT_DRAWING: &str = default_drawing::DEFAULT_DRAWING;
 #[derive(Debug, Default)]
 #[wasm_bindgen]
 pub struct Drawing {
@@ -48,12 +50,12 @@ pub fn create_canvas_drawing(class: String) -> Result<(), JsValue> {
         let drawing_data = list_elem.dataset();
         let points_vec =
             serde_json::from_str::<Vec<Vec<[i32; 2]>>>(&drawing_data.get("points").unwrap())
-                .unwrap_or(vec![]);
+                .unwrap_or(serde_json::from_str::<Vec<Vec<[i32; 2]>>>(DEFAULT_DRAWING).unwrap());
         let originnal_canvas_width = drawing_data
             .get("width")
             .unwrap()
             .parse::<f64>()
-            .unwrap_or(50.0);
+            .unwrap_or(482.0);
 
         list_elem
             .dyn_into::<Element>()

@@ -3,24 +3,28 @@
 {% set drawing = user_drawing.1 %}
 <div class="drawing-list-container">
     <div class="drawing-list-user-container">
+        <div class="username">
+            {{user.username}}
+        </div>
         <a href="/user/{{user.id}}">
             <div class="wasm-user-div" data-points="{{ user.profile_pic }}" data-width="{{user.profile_pic_width}}">
             </div>
         </a>
+        {% if current_user_id and current_user_id == drawing.user_id %}
+        <div class="delete-drawing">
+            <form action="/delete_drawing/{{drawing.id}}" method="post">
+                <input type="hidden" name="_method" value="delete" />
+                <button type="submit" title="Delete">&#10005;</button>
+            </form>
+        </div>
+        {% endif %}
+
     </div>
     <div class="drawing-list-item-container">
         <div class="drawing-list-item wasm-canvas-div" data-points="{{ drawing.points }}"
             data-width="{{drawing.width}}"></div>
     </div>
 </div>
-{% if current_user_id and current_user_id == drawing.user_id %}
-<div>
-    <form action="/delete_drawing/{{drawing.id}}" method="post">
-        <input type="hidden" name="_method" value="delete" />
-        <button type="submit">Delete</button>
-    </form>
-</div>
-{% endif %}
 {% endfor %}
 <script>
     wasmImport.then((wasm) => {

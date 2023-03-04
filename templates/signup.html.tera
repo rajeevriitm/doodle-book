@@ -3,17 +3,23 @@
 Signup
 {% endblock title %}
 {% block center %}
+<div class="account-reg">
+    <div class="account-header">
+        <h1>Welcome to Doodle Book</h1>
+    </div>
+    <form method="post" action="/users/create">
+        <label for="username">Userame:</label><br>
+        <input type="text" id="username" name="username" required><br>
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password" required><br>
+        <input type="submit" id="submit-button" class="acc-button" value="Submit">
 
-<a href="/users/signin"> SignIn</a>
-{# {% endif %} #}
-<form method="post" action="/users/create">
-    <label for="username">Name:</label><br>
-    <input type="text" id="username" name="username"><br>
-    <label for="email">Email:</label><br>
-    <input type="email" id="email" name="email"><br>
-    <label for="password">Password:</label><br>
-    <input type="password" id="password" name="password"><br>
-    <input type="submit" id="submit-button" value="Submit">
+    </form>
+    <div class="login-acc">
+        <p>If you already have an account, please <a href="/users/signin">login</a>.</p>
+    </div>
+</div>
 
-</form>
 {% endblock center %}

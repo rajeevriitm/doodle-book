@@ -27,6 +27,7 @@ pub struct Configuration {
 }
 #[launch]
 fn rocket() -> _ {
+    info!("jjjjjjjjjjj");
     rocket::build()
         .mount(
             "/",

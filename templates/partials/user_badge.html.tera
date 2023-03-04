@@ -1,13 +1,14 @@
 <div class="user-badge-container">
     <div class="wasm-canvas-div user-badge-canvas-div" data-points="{{ user.profile_pic }}"
         data-width="{{user.profile_pic_width}}"> </div>
+    {% if current_user_id and current_user_id == user.id %}
+    <a href="/users/edit" class="edit-link">
+        <span class="edit-icon">✎</span>
+    </a>
+    {% endif %}
     <div class="user-badge-name">
         {{ user.username }}
     </div>
-    {% if current_user_id and current_user_id == user.id %}
-
-    {{ macros::link_to(text="Edit",link="/users/edit")}}
-    {% endif %}
 </div>
 <script>
     wasmImport.then((wasm) => {

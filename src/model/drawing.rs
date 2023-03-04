@@ -79,7 +79,7 @@ impl NewDrawing {
             .execute(conn)
     }
 }
-#[derive(Insertable)]
+#[derive(Insertable, Debug)]
 #[table_name = "drawings"]
 pub struct NewDrawing {
     points: String,
