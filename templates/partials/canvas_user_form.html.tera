@@ -1,15 +1,15 @@
-<div>
+<div class="start-doodling">
     Draw new avatar
 </div>
 <div id="canvas-form-div">
 </div>
 <form method="post" action="/users/update" id="canvas-form">
-    <input type="button" id="canvas-clear" value="Clear">
-    <input type="button" id="canvas-button" value="Submit">
+    <input type="button" id="canvas-clear" value="Clear" class="input-buttons clear">
     <input type="hidden" name="_method" value="put" />
     <input type="hidden" id="points" name="points" value="[]"><br>
     <input type="hidden" id="canvas-form-width" name="width"><br>
-    <input type="text" name="username" value={{user.username}}>
+    <input type="text" name="username" value={{user.username}} class="username-edit"><br>
+    <input type="button" id="canvas-button" value="Submit" class="input-buttons">
 </form>
 <script>
     wasmImport.then((wasm) => {

@@ -10,11 +10,9 @@ use rocket_dyn_templates::{context, Template};
 #[get("/", rank = 2)]
 pub async fn unauth_home(flash: Option<FlashMessage<'_>>, db: Db) -> Template {
     let flash = flash.map(FlashMessage::into_inner);
+    // let flash = Some(("error", "created accoutn"));
     let user_drawings = db
         .run(move |conn| {
-            // let config = User::count(conn);
-            // dbg!(config);
-
             let admin = User::find_user_with_name("Doodler", conn)?;
             let drawings = Drawing::user_drawings(&admin, conn).unwrap_or(vec![]);
             let user_drawings = create_user_list(&admin, drawings);
@@ -68,6 +66,7 @@ pub async fn user_profile(
             Ok::<_, diesel::result::Error>((user, user_drawings))
         })
         .await;
+    dbg!(&result);
     result
         .map(|(user, user_drawings)| {
             Template::render("user", context! {flash,user,user_drawings,current_user_id})

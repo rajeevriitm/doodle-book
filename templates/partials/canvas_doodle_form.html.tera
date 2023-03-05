@@ -1,15 +1,20 @@
-<div class="start-doodling"> Start doodling away.... </div>
-<div class="canvas-form-div-container">
+<div class="doodle-form-big-container">
 
-    <div id="canvas-form-div">
+    <div class="start-doodling"> Start doodling away.... </div>
+    <div class="canvas-form-div-container">
+
+        <div id="canvas-form-div">
+        </div>
     </div>
+    <form method="post" action="/create" id="canvas-form">
+        <div class="canvas-form-buttons">
+            <input type="button" id="canvas-clear" value="Clear" class="input-buttons clear">
+            <input type="button" id="canvas-button" value="Submit" disabled class="input-buttons">
+        </div>
+        <input type="hidden" id="points" name="points" value="[]"><br>
+        <input type="hidden" id="canvas-form-width" name="width">
+    </form>
 </div>
-<form method="post" action="/create" id="canvas-form">
-    <input type="button" id="canvas-clear" value="Clear">
-    <input type="button" id="canvas-button" value="Submit" disabled>
-    <input type="hidden" id="points" name="points" value="[]"><br>
-    <input type="hidden" id="canvas-form-width" name="width"><br>
-</form>
 <script>
     wasmImport.then((wasm) => {
         wasm.create_canvas_form();

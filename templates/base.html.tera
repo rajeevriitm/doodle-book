@@ -32,7 +32,7 @@
         {# <a href="#" class="signin-btn">Sign In</a> #}
     </header>
     {% if flash %}
-    <div class="message">
+    <div class="message {{flash.0}}">
         <div> {{ flash.1 }} </div>
         <span class="close" onclick="closeFlash(event)">&times;</span>
     </div>

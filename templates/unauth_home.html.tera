@@ -4,11 +4,12 @@
 <script src="/static/dist/main.js"></script>
 {% endblock script %}
 {% block left_col %}
-<div class="badge-welcome-container">
-    <div class="badge-welcome-header">Welcome to Doodle Book</div>
+<div class="badge-welcome-container user-badge-container">
+    <div class="badge-welcome-header">Welcome to <br> Doodle Book</div>
     <div class="badge-welcome-subheader">A place to be creative</div>
     <div class="badge-welcome-buttons">
         <a href="/users/signup" class="badge-welcome-button">Sign Up</a>
+        <div class="already-account"> Already have an account?</div>
         <a href="/users/signin" class="badge-welcome-button">Sign In</a>
     </div>
 </div>

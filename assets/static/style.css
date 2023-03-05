@@ -4,7 +4,7 @@
     width: 100%;
     height: 100%;
     margin: 0;
-    padding: 20px 10px;
+    padding: 10px 10px;
 }
 
 .col-left {
@@ -75,7 +75,8 @@ body {
     max-width: 400px;
 }
 
-.account-reg input {
+.account-reg input,
+#canvas-form .username-edit {
     font-size: 1rem;
     padding: 0.5rem;
     margin-bottom: 1rem;
@@ -149,14 +150,24 @@ body {
 
 
 .message {
+    border-radius: 4px;
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
     color: #fff;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 10px;
+    padding: 5px 50px;
     box-sizing: border-box;
+}
+
+.message.success {
+    background-color: rgb(132, 204, 132);
+    /* text-align: center; */
+}
+
+.message.error {
+    background-color: rgb(228, 162, 143);
+    /* text-align: center; */
 }
 
 .close {
@@ -214,26 +225,48 @@ canvas {
 }
 
 .badge-welcome-header {
-    font-size: 18px;
+    font-size: 32px;
+    font-family: Brush Script MT, cursive;
+    padding: 10px 5px;
+    width: 100%;
+    background-color: whitesmoke;
 }
 
 .badge-welcome-subheader {
-    font-size: 14px;
+    font-size: 19px;
+    font-weight: 400;
+    color: #0d1d27;
+    padding: 20px 0;
 }
 
 .badge-welcome-buttons {
-    display: flex;
+    /* display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: center; */
+}
+
+.already-account {
+    padding: 30px 5px 10px;
+    font-size: 14px;
+    color: #333;
 }
 
 .badge-welcome-button {
-    padding: 10px 20px;
-    margin: 10px;
-    background-color: #eee;
+    display: inline-block;
+    padding: 0.5em 1em;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 1rem;
+    text-align: center;
     text-decoration: none;
-    color: black;
+    border-radius: 4px;
+    transition: all 0.2s ease-in-out;
+}
+
+.badge-welcome-button:last-child {
+    background-color: #2cb950;
 }
 
 .logout-header-btn {
@@ -271,7 +304,7 @@ canvas {
     display: flex;
     justify-content: space-between;
     padding: 20px 0;
-    border-top: 1px solid rgb(199, 248, 246);
+    border-bottom: 1px solid rgb(199, 248, 246);
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1) inset;
 }
 
@@ -303,15 +336,43 @@ canvas {
 
 .drawing-list-container .delete-drawing button {
     /* border-radius: 50%; */
-    color: #3d3d3d;
-    background-color: rgb(252, 83, 71);
+    /* color: #3d3d3d; */
+    /* background-color: rgb(252, 83, 71); */
     cursor: pointer;
     border: none;
     border-radius: 50%;
-    box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 0 2px rgba(0, 0, 0, 0.1); */
     font-size: 18px;
 }
 
 .drawing-list-container .drawing-list-item-container {
     width: 75%;
 }
+
+#canvas-form .canvas-form-buttons {
+    display: flex;
+    justify-content: flex-end;
+}
+
+#canvas-form .input-buttons {
+    background-color: #4CAF50;
+    margin-top: 5px;
+    color: white;
+    font-size: 14px;
+    padding: 5px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#canvas-form .input-buttons.clear {
+    background-color: #f44336;
+    margin-right: 20px;
+}
+
+.doodle-form-big-container {
+    border-bottom: 1px solid rgb(199, 248, 246);
+}
+
+.badge-welcome-container
