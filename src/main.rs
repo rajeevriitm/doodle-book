@@ -2,14 +2,15 @@
 extern crate rocket;
 #[macro_use]
 extern crate diesel;
+mod services;
 #[cfg(test)]
 mod test;
 use rocket::fs::{relative, FileServer};
 mod model;
 mod routes;
 mod schema;
+use rocket::fairing::AdHoc;
 use rocket::serde::Deserialize;
-use rocket::{fairing::AdHoc, State};
 use rocket_dyn_templates::Template;
 use rocket_sync_db_pools::database;
 use routes::drawings_route::{delete_drawing, save_drawing};
@@ -27,7 +28,6 @@ pub struct Configuration {
 }
 #[launch]
 fn rocket() -> _ {
-    info!("jjjjjjjjjjj");
     rocket::build()
         .mount(
             "/",

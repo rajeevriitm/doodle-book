@@ -1,6 +1,6 @@
 use crate::model::user::{User, UserForm, UserUpdateForm};
 use crate::routes::profile_route;
-use crate::routes::AuthInfo;
+use crate::services::AuthInfo;
 use crate::Configuration;
 use crate::Db;
 use rocket::form::{Contextual, Form};
@@ -33,7 +33,10 @@ pub async fn update_user(
             form.profile_pic_width = None;
         }
     }
-    let redirect = Redirect::to(uri!(profile_route::user_profile(id = auth.user_id)));
+    let redirect = Redirect::to(uri!(profile_route::user_profile(
+        id = auth.user_id,
+        page = _
+    )));
     let result = db
         .run(move |conn| form.update_user(auth.user_id, conn))
         .await;
@@ -116,7 +119,7 @@ pub async fn create_user(
                             "Successfully Signed Up",
                         )
                     })
-                    .map_err(|err| render_template("signup", "Unable to save due to error occured"))
+                    .map_err(|_| render_template("signup", "Unable to save due to error occured"))
             })
             .await
         }

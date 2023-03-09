@@ -1,20 +1,21 @@
-use crate::model::{drawing, user};
+// use crate::model::{drawing, user};
 use crate::model::{drawing::Drawing, user::User};
-use crate::routes::AuthInfo;
-use crate::schema::drawings;
+use crate::services::AuthInfo;
+// use crate::schema::drawings;
 use crate::Db;
 use rocket::http::{Cookie, CookieJar};
 use rocket::request::FlashMessage;
-use rocket::response::{Flash, Redirect};
+use rocket::response::Redirect;
 use rocket_dyn_templates::{context, Template};
-#[get("/", rank = 2)]
-pub async fn unauth_home(flash: Option<FlashMessage<'_>>, db: Db) -> Template {
+#[get("/?<page>", rank = 2)]
+pub async fn unauth_home(flash: Option<FlashMessage<'_>>, db: Db, page: Option<i64>) -> Template {
+    let page = page.unwrap_or(1);
     let flash = flash.map(FlashMessage::into_inner);
     // let flash = Some(("error", "created accoutn"));
     let user_drawings = db
         .run(move |conn| {
             let admin = User::find_user_with_name("Doodler", conn)?;
-            let drawings = Drawing::user_drawings(&admin, conn).unwrap_or(vec![]);
+            let drawings = Drawing::user_drawings(&admin, page, conn).unwrap_or(vec![]);
             let user_drawings = create_user_list(&admin, drawings);
             Ok::<_, diesel::result::Error>(user_drawings)
         })
@@ -22,18 +23,20 @@ pub async fn unauth_home(flash: Option<FlashMessage<'_>>, db: Db) -> Template {
         .unwrap();
     Template::render("unauth_home", context! {user_drawings, flash})
 }
-#[get("/", rank = 1)]
+#[get("/?<page>", rank = 1)]
 pub async fn auth_home(
     flash: Option<FlashMessage<'_>>,
     auth: AuthInfo,
+    page: Option<i64>,
     db: Db,
     cookie_jar: &CookieJar<'_>,
 ) -> Result<Template, Redirect> {
     let flash = flash.map(FlashMessage::into_inner);
+    let page = page.unwrap_or(1);
     let result = db
         .run(move |conn| {
             let current_user = User::find(auth.user_id, conn)?;
-            let drawings = Drawing::home(&current_user, conn).unwrap_or(vec![]);
+            let drawings = Drawing::home(&current_user, page, conn).unwrap_or(vec![]);
             Ok::<_, diesel::result::Error>((current_user, drawings))
         })
         .await;
@@ -49,19 +52,21 @@ pub async fn auth_home(
             Redirect::to("/")
         })
 }
-#[get("/user/<id>")]
+#[get("/user/<id>?<page>")]
 pub async fn user_profile(
     db: Db,
     id: i32,
+    page: Option<i64>,
     auth: Option<AuthInfo>,
     flash: Option<FlashMessage<'_>>,
 ) -> Result<Template, Redirect> {
+    let page = page.unwrap_or(1);
     let flash = flash.map(FlashMessage::into_inner);
     let current_user_id = auth.map(|auth| auth.user_id);
     let result = db
         .run(move |conn| {
             let user = User::find(id, conn)?;
-            let drawings = Drawing::user_drawings(&user, conn).unwrap_or(vec![]);
+            let drawings = Drawing::user_drawings(&user, page, conn).unwrap_or(vec![]);
             let user_drawings = create_user_list(&user, drawings);
             Ok::<_, diesel::result::Error>((user, user_drawings))
         })

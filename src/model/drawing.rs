@@ -4,6 +4,7 @@ use diesel::prelude::*;
 // use rocket::serde::{Deserialize, Serialize};
 use crate::model::user::User;
 use crate::schema::{drawings, users};
+use crate::services::Paginator;
 use rocket::form::{self, Error};
 use rocket_sync_db_pools::diesel;
 use serde::Serialize;
@@ -21,9 +22,11 @@ pub struct Drawing {
 impl Drawing {
     pub fn user_drawings(
         user: &User,
+        page: i64,
         conn: &mut diesel::PgConnection,
     ) -> QueryResult<Vec<Drawing>> {
         Drawing::belonging_to(user)
+            .paginate(page)
             .order(drawings::created_at.desc())
             .load(conn)
     }
@@ -35,10 +38,15 @@ impl Drawing {
             .filter(drawings::id.eq(id))
             .execute(conn)
     }
-    pub fn home(user: &User, conn: &mut diesel::PgConnection) -> QueryResult<Vec<(User, Drawing)>> {
+    pub fn home(
+        user: &User,
+        page: i64,
+        conn: &mut diesel::PgConnection,
+    ) -> QueryResult<Vec<(User, Drawing)>> {
         users::table
             .inner_join(drawings::table)
             .filter(users::id.eq(user.id))
+            .paginate(page)
             .order(drawings::created_at.desc())
             .load(conn)
     }

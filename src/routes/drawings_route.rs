@@ -1,10 +1,10 @@
-use crate::model::drawing::{self, Drawing, DrawingForm};
-use crate::routes::AuthInfo;
+use crate::model::drawing::{Drawing, DrawingForm};
+use crate::services::AuthInfo;
 use crate::Db;
 use rocket::form::Form;
-use rocket::request::Request;
+// use rocket::request::Request;
 use rocket::response::{Flash, Redirect};
-use rocket_dyn_templates::{context, Template};
+// use rocket_dyn_templates::{context, Template};
 
 #[post("/create", data = "<drawing>")]
 pub async fn save_drawing(
@@ -13,7 +13,7 @@ pub async fn save_drawing(
     auth: AuthInfo,
 ) -> Result<Flash<Redirect>, String> {
     let drawing = drawing.get_new_drawing(auth.user_id);
-    dbg!(&drawing);
+    // dbg!(&drawing.);
     db.run(move |conn| drawing.save_to_db(conn))
         .await
         .map(|_out| Flash::success(Redirect::to("/"), "Successfully drawn"))
