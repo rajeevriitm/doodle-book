@@ -1,6 +1,6 @@
 // use crate::model::{drawing, user};
 use crate::model::{drawing::Drawing, user::User};
-use crate::services::AuthInfo;
+use crate::services::{AuthInfo, Page};
 // use crate::schema::drawings;
 use crate::Db;
 use rocket::http::{Cookie, CookieJar};
@@ -21,7 +21,9 @@ pub async fn unauth_home(flash: Option<FlashMessage<'_>>, db: Db, page: Option<i
         })
         .await
         .unwrap();
-    Template::render("unauth_home", context! {user_drawings, flash})
+    let url = uri!(unauth_home(page = _)).to_string();
+    let page = Page::new(page, &user_drawings, url);
+    Template::render("unauth_home", context! {user_drawings, flash,page})
 }
 #[get("/?<page>", rank = 1)]
 pub async fn auth_home(
@@ -42,9 +44,11 @@ pub async fn auth_home(
         .await;
     result
         .map(|(user, user_drawings)| {
+            let url = uri!(auth_home(page = _)).to_string();
+            let page = Page::new(page, &user_drawings, url);
             Template::render(
                 "auth_home",
-                context! {current_user_id: user.id,user,user_drawings,flash},
+                context! {current_user_id: user.id,user,user_drawings,flash,page},
             )
         })
         .map_err(|_| {
@@ -74,7 +78,12 @@ pub async fn user_profile(
     dbg!(&result);
     result
         .map(|(user, user_drawings)| {
-            Template::render("user", context! {flash,user,user_drawings,current_user_id})
+            let url = uri!(user_profile(id = id, page = _)).to_string();
+            let page = Page::new(page, &user_drawings, url);
+            Template::render(
+                "user",
+                context! {flash,user,user_drawings,current_user_id,page},
+            )
         })
         .map_err(|_| Redirect::to("/"))
 }

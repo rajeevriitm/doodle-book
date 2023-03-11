@@ -26,6 +26,15 @@
     </div>
 </div>
 {% endfor %}
+<div class="pagination">
+    {% if page.prev_page %}
+    <a href="{{page.prev_page}}">❮</a>
+    {% endif %}
+    {% if page.next_page %}
+    <a href="{{page.next_page}}">❯</a>
+    {% endif %}
+</div>
+
 <script>
     wasmImport.then((wasm) => {
         wasm.create_canvas_drawing("drawing-list-item");

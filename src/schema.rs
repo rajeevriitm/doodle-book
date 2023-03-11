@@ -9,6 +9,14 @@ table! {
 }
 
 table! {
+    relationships (id) {
+        id -> Int4,
+        follower_id -> Int4,
+        following_id -> Int4,
+    }
+}
+
+table! {
     users (id) {
         id -> Int4,
         username -> Varchar,
@@ -16,6 +24,8 @@ table! {
         password -> Varchar,
         profile_pic -> Nullable<Text>,
         profile_pic_width -> Nullable<Int4>,
+        followers_count -> Int4,
+        following_count -> Int4,
     }
 }
 
@@ -23,5 +33,6 @@ joinable!(drawings -> users (user_id));
 
 allow_tables_to_appear_in_same_query!(
     drawings,
+    relationships,
     users,
 );

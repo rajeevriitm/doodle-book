@@ -22,6 +22,8 @@ pub struct User {
     password: String,
     profile_pic: Option<String>,
     profile_pic_width: Option<i32>,
+    followers_count: i32,
+    following_count: i32,
 }
 #[derive(AsChangeset, FromForm, Debug)]
 #[table_name = "users"]

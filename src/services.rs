@@ -1,13 +1,14 @@
-// use diesel::prelude::Table;
+const PER_PAGE: i64 = 8;
 use diesel::query_dsl::methods::{LimitDsl, OffsetDsl};
 use rocket::{
     request::{FromRequest, Outcome},
     Request,
 };
-
+use serde::Serialize;
+// use rocket::http::uri::Origin;
+// use crate::routes::profile_route;
 // use crate::diesel::QueryDsl;
 pub trait Paginator {
-    const PER_PAGE: i64 = 10;
     type Output;
     fn paginate(self, page: i64) -> Self::Output;
 }
@@ -20,8 +21,29 @@ where
 {
     type Output = OffsetDslOutput<LimitDslOutput<T>>;
     fn paginate(self, page: i64) -> Self::Output {
-        let offset = (page - 1) * Self::PER_PAGE;
-        self.limit(Self::PER_PAGE).offset(offset)
+        let offset = (page - 1) * PER_PAGE;
+        self.limit(PER_PAGE).offset(offset)
+    }
+}
+#[derive(Serialize)]
+pub struct Page {
+    current: i64,
+    next_page: Option<String>,
+    prev_page: Option<String>,
+}
+impl Page {
+    pub fn new<T>(current: i64, list: &Vec<T>, url: String) -> Self {
+        let next_page =
+            (list.len() == PER_PAGE as usize).then(|| Page::create_url(url.clone(), current + 1));
+        let prev_page = (current > 1).then(|| Page::create_url(url, current - 1));
+        Page {
+            current,
+            next_page,
+            prev_page,
+        }
+    }
+    fn create_url(url: String, page: i64) -> String {
+        format!("{}?page={}", url, page)
     }
 }
 #[rocket::async_trait]
