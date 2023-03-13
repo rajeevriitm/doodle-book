@@ -39,7 +39,8 @@
 }
 
 header {
-    background-color: #e7e3e3;
+    /* background-color: #e7e3e3; */
+    background-color: #E6E6FA;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -215,7 +216,7 @@ canvas {
 .user-badge-name {
     text-align: left;
     margin-top: 10px;
-    font-size: 22px;
+    font-size: 26px;
     font-weight: 700;
     font-family: 'Courier New', Courier, monospace;
 }
@@ -398,4 +399,21 @@ canvas {
 
 .pagination a:hover:not(.active) {
     background-color: #ddd;
+}
+
+.relationship-container {
+    padding: 20px 0;
+}
+
+.relationship-container div {
+    display: inline-block;
+    padding: 0 10px;
+}
+
+.follow-btn {
+    background-color: #007bff;
+}
+
+.unfollow-btn {
+    background-color: rgb(236, 148, 89);
 }

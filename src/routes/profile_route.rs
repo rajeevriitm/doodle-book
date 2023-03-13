@@ -1,5 +1,5 @@
 // use crate::model::{drawing, user};
-use crate::model::{drawing::Drawing, user::User};
+use crate::model::{drawing::Drawing, relationship::*, user::User};
 use crate::services::{AuthInfo, Page};
 // use crate::schema::drawings;
 use crate::Db;
@@ -72,20 +72,37 @@ pub async fn user_profile(
             let user = User::find(id, conn)?;
             let drawings = Drawing::user_drawings(&user, page, conn).unwrap_or(vec![]);
             let user_drawings = create_user_list(&user, drawings);
-            Ok::<_, diesel::result::Error>((user, user_drawings))
+            let show_unfollow_btn = current_user_id
+                .map(|current_user_id| relation_exist(current_user_id, user.id, conn))
+                .transpose()?
+                .map(|following| choose_action_and_url(following));
+            Ok::<_, diesel::result::Error>((user, user_drawings, show_unfollow_btn))
         })
         .await;
-    dbg!(&result);
     result
-        .map(|(user, user_drawings)| {
+        .map(|(user, user_drawings, show_unfollow_btn)| {
             let url = uri!(user_profile(id = id, page = _)).to_string();
             let page = Page::new(page, &user_drawings, url);
             Template::render(
                 "user",
-                context! {flash,user,user_drawings,current_user_id,page},
+                context! {flash,user,user_drawings,current_user_id,page,show_unfollow_btn},
             )
         })
         .map_err(|_| Redirect::to("/"))
+}
+fn choose_action_and_url(following: bool) -> (bool, String) {
+    let url = if following {
+        uri!(
+            "/relationship",
+            crate::routes::relationships_route::unfollow()
+        )
+    } else {
+        uri!(
+            "/relationship",
+            crate::routes::relationships_route::follow()
+        )
+    };
+    (following, url.to_string())
 }
 fn create_user_list(user: &User, drawings: Vec<Drawing>) -> Vec<(User, Drawing)> {
     drawings

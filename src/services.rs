@@ -60,6 +60,16 @@ impl<'a> FromRequest<'a> for AuthInfo {
         }
     }
 }
+#[rocket::async_trait]
+impl<'a> FromRequest<'a> for ReferrerUrl {
+    type Error = ();
+    async fn from_request(req: &'a Request<'_>) -> Outcome<Self, Self::Error> {
+        let url = req.headers().get("Referer").next();
+        let url = url.unwrap_or("/").to_string();
+        Outcome::Success(ReferrerUrl(url))
+    }
+}
+pub struct ReferrerUrl(pub String);
 pub struct AuthInfo {
     pub user_id: i32,
 }

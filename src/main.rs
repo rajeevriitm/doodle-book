@@ -15,6 +15,7 @@ use rocket_dyn_templates::Template;
 use rocket_sync_db_pools::database;
 use routes::drawings_route::{delete_drawing, save_drawing};
 use routes::profile_route::{auth_home, unauth_home, user_profile};
+use routes::relationships_route::{follow, unfollow};
 use routes::users_route::{
     authenticated_signin, authenticated_signup, create_session, create_user, edit_profile, signin,
     signout, signup, update_user,
@@ -53,6 +54,7 @@ fn rocket() -> _ {
                 update_user
             ],
         )
+        .mount("/relationship", routes![follow, unfollow])
         .attach(Template::fairing())
         .attach(Db::fairing())
         .attach(AdHoc::config::<Configuration>())

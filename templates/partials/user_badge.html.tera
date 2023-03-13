@@ -9,6 +9,33 @@
     <div class="user-badge-name">
         {{ user.username }}
     </div>
+    <div class="relationship-container">
+        <div>
+            <span class="relationship-number">{{user.followers_count}}</span> followers
+        </div>
+        <div>
+            <span class="relationship-number">{{user.following_count}}</span> following
+        </div>
+    </div>
+    {% if show_unfollow_btn is defined and show_unfollow_btn.0 == false %}
+    <div>
+        <form method="post" action={{show_unfollow_btn.1}}>
+            <input type="hidden" name="following_id" value={{user.id}}>
+            <input type="submit" value="Follow" class="btn follow-btn">
+        </form>
+
+    </div>
+    {% elif show_unfollow_btn is defined and show_unfollow_btn.0 == true %}
+    <div>
+        <form method="post" action={{show_unfollow_btn.1}}>
+            <input type="hidden" name="_method" value="delete">
+            <input type="hidden" name="following_id" value={{user.id}}>
+            <input type="submit" value="Unfollow" class="btn unfollow-btn">
+        </form>
+    </div>
+
+    {% endif %}
+
 </div>
 <script>
     wasmImport.then((wasm) => {
