@@ -240,13 +240,6 @@ canvas {
     padding: 20px 0;
 }
 
-.badge-welcome-buttons {
-    /* display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center; */
-}
-
 .already-account {
     padding: 30px 5px 10px;
     font-size: 14px;

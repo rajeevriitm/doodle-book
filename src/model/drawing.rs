@@ -3,7 +3,7 @@
 use diesel::prelude::*;
 // use rocket::serde::{Deserialize, Serialize};
 use crate::model::user::User;
-use crate::schema::{drawings, users};
+use crate::schema::{drawings, relationships, users};
 use crate::services::Paginator;
 use rocket::form::{self, Error};
 use rocket_sync_db_pools::diesel;
@@ -45,10 +45,20 @@ impl Drawing {
     ) -> QueryResult<Vec<(User, Drawing)>> {
         users::table
             .inner_join(drawings::table)
-            .filter(users::id.eq(user.id))
+            .left_outer_join(relationships::table.on(relationships::following_id.eq(users::id)))
+            .filter(drawings::user_id.eq(user.id))
+            .or_filter(relationships::follower_id.eq(user.id))
             .paginate(page)
             .order(drawings::created_at.desc())
+            .select((users::all_columns, drawings::all_columns))
             .load(conn)
+
+        // users::table
+        //     .inner_join(drawings::table)
+        //     .filter(users::id.eq(user.id))
+        //     .paginate(page)
+        //     .order(drawings::created_at.desc())
+        //     .load(conn)
     }
     #[cfg(test)]
     pub fn delete_all(conn: &mut diesel::PgConnection) {
