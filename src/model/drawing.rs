@@ -1,6 +1,6 @@
 // use diesel::insert_into;
 // use rocket_sync_db_pools::diesel::*;
-use diesel::prelude::*;
+use ::diesel::prelude::*;
 // use rocket::serde::{Deserialize, Serialize};
 use crate::model::user::User;
 use crate::schema::{drawings, relationships, users};
@@ -11,7 +11,7 @@ use serde::Serialize;
 use std::time::SystemTime;
 // type Result<T, E = Debug<diesel::result::Error>> = std::result::Result<T, E>;
 #[derive(Debug, Associations, Identifiable, Queryable, Serialize)]
-#[belongs_to(User)]
+#[diesel(belongs_to(User))]
 pub struct Drawing {
     id: i32,
     pub points: String,
@@ -54,7 +54,7 @@ impl Drawing {
             .load(conn)
 
         // users::table
-        //     .inner_join(drawings::table)
+        //     .inner_join(dra  wings::table)
         //     .filter(users::id.eq(user.id))
         //     .paginate(page)
         //     .order(drawings::created_at.desc())
@@ -98,7 +98,7 @@ impl NewDrawing {
     }
 }
 #[derive(Insertable, Debug)]
-#[table_name = "drawings"]
+#[diesel(table_name = drawings)]
 pub struct NewDrawing {
     points: String,
     user_id: i32,

@@ -1,5 +1,5 @@
 use crate::schema::{relationships, users};
-use diesel::prelude::*;
+use ::diesel::prelude::*;
 use rocket_sync_db_pools::diesel::{self, PgConnection};
 #[derive(FromForm)]
 pub struct RelationshipForm {
@@ -10,7 +10,7 @@ pub fn follow_user(
     following_id: i32,
     conn: &mut PgConnection,
 ) -> QueryResult<()> {
-    conn.transaction(|| {
+    conn.transaction(|conn| {
         diesel::insert_into(relationships::table)
             .values((
                 relationships::follower_id.eq(follower_id),
@@ -33,7 +33,7 @@ pub fn unfollow_user(
     following_id: i32,
     conn: &mut PgConnection,
 ) -> QueryResult<()> {
-    conn.transaction(|| {
+    conn.transaction(|conn| {
         diesel::delete(relationships::table)
             .filter(
                 relationships::follower_id

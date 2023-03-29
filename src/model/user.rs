@@ -1,11 +1,11 @@
 use crate::schema::users;
+use ::diesel::prelude::*;
 use argon2::{PasswordHasher, PasswordVerifier};
-use diesel::prelude::*;
 use rocket_sync_db_pools::diesel;
 use serde::Serialize;
 
 #[derive(FromForm, Debug, Insertable, Clone)]
-#[table_name = "users"]
+#[diesel(table_name = users)]
 pub struct UserForm {
     #[field(default="Tom",validate=len(1..))]
     username: String,
@@ -26,7 +26,7 @@ pub struct User {
     following_count: i32,
 }
 #[derive(AsChangeset, FromForm, Debug)]
-#[table_name = "users"]
+#[diesel(table_name = users)]
 pub struct UserUpdateForm {
     username: String,
     #[field(name = "points")]
