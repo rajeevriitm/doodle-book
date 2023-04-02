@@ -4,7 +4,7 @@ const webpack = require('webpack');
 const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
 // const CopyPlugin = require("copy-webpack-plugin");
 module.exports = {
-    mode: 'development',
+    // mode: 'development',
     entry: './index.js',
     output: {
         filename: 'main.js',
