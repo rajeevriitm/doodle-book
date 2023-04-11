@@ -1,0 +1,35 @@
+version: "3.8"
+services:
+  web:
+    image: doodle
+    build:
+      context: .
+      args:
+        DOCKER_BUILDKIT: 1
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    environment:
+      - RUST_BACKTRACE=1
+      - DATABASE_URL=postgres://raj:iitm@db:5431/doodles
+      - ROCKET_DATABASES='{ doodles = { url = "postgres://raj:iitm@db:5431/doodles" } }'
+      - ROCKET_LOG=debug
+      - ROCKET_ADDRESS=0.0.0.0
+      - ROCKET_PORT=8000
+      - ROCKET_SECRET_KEY=tQasUqto0SqOKLprGhL69QOpSUFRqyq1KuG/aDOW6LA=
+      - ROCKET_PASSWORD_SALT=saltdfhdlifjlidsjlslvjsjdhiosdisosiijifhdoij
+  db:
+    image: postgres:alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=raj
+      - POSTGRES_PASSWORD=iitm
+      - POSTGRES_DB=doodles
+    ports:
+      - '5431:5432'
+    volumes:
+      - db:/var/lib/postgresql/data
+volumes:
+  db:
+    driver: local

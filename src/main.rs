@@ -29,6 +29,9 @@ pub struct Configuration {
 }
 #[launch]
 fn rocket() -> _ {
+    for (key, value) in std::env::vars() {
+        println!("{}={}", key, value);
+    }
     rocket::build()
         .mount(
             "/",
