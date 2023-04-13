@@ -13,7 +13,7 @@ services:
     environment:
       - RUST_BACKTRACE=1
       - DATABASE_URL=postgres://raj:iitm@db:5431/doodles
-      - ROCKET_DATABASES='{ doodles = { url = "postgres://raj:iitm@db:5431/doodles" } }'
+      - ROCKET_DATABASES={doodles={url="postgres://raj:iitm@db:5432/doodles"}}
       - ROCKET_LOG=debug
       - ROCKET_ADDRESS=0.0.0.0
       - ROCKET_PORT=8000
@@ -26,8 +26,6 @@ services:
       - POSTGRES_USER=raj
       - POSTGRES_PASSWORD=iitm
       - POSTGRES_DB=doodles
-    ports:
-      - '5431:5432'
     volumes:
       - db:/var/lib/postgresql/data
 volumes:
