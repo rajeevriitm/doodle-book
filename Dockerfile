@@ -38,13 +38,11 @@ RUN  npm run build-prod
 FROM ${TYPE}-build as source
 
 FROM debian:bullseye-slim as runner
-RUN apt-get update && apt-get -y install libpq-dev && rm -rf /var/lib/apt/lists/*
 COPY --from=source /app/doodle-book /usr/local/bin/doodle-book
 COPY --from=source /app/assets/static /app/assets/static
+RUN apt-get update && apt-get -y install libpq5 && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY ./Rocket.toml ./
 COPY templates templates/
 EXPOSE 8000
 CMD [ "doodle-book" ]
-# CMD [ "sleep","600" ]
-

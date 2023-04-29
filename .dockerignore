@@ -1,3 +1,4 @@
 target/*
 doodle-wasm/target/*
 assets/node_modules
+.git

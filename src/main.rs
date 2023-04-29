@@ -29,11 +29,6 @@ pub struct Configuration {
 }
 #[launch]
 fn rocket() -> _ {
-    for (key, value) in std::env::vars() {
-        println!("{}={}", key, value);
-    }
-    let databases = std::env::var("ROCKET_DATABASES").expect("ROCKET_DATABASES not set");
-    println!("ROCKET_DATABASES: {}", databases);
     rocket::build()
         .mount(
             "/",
