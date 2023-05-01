@@ -7,8 +7,8 @@ on:
     branches: [ "main" ]
 
 env:
-  - CARGO_TERM_COLOR=always
-  - ROCKET_DATABASES={doodles={url="postgres://raj:iitm@db:5432/doodles_test"}}
+  CARGO_TERM_COLOR: always
+  ROCKET_DATABASES: {doodles={url="postgres://raj:iitm@db:5432/doodles_test"}}
 
 
 jobs:
