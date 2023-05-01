@@ -2,28 +2,27 @@ name: Rust
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 env:
   CARGO_TERM_COLOR: always
-  ROCKET_DATABASES: {doodles={url="postgres://raj:iitm@db:5432/doodles_test"}}
-
+  ROCKET_DATABASES: '{doodles: {url="postgres://raj:iitm@db:5432/doodles_test"}}'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Build
-      run: cargo build --verbose
-    - name: Run tests
-      run: cargo test --verbose
+      - uses: actions/checkout@v3
+      - name: Build
+        run: cargo build --verbose
+      - name: Run tests
+        run: cargo test --verbose
     services:
-      image: postgres:alpine
-      environment:
-        - POSTGRES_USER=raj
-        - POSTGRES_PASSWORD=iitm
-        - POSTGRES_DB=doodles_test
-
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: raj
+          POSTGRES_PASSWORD: iitm
+          POSTGRES_DB: doodles_test
