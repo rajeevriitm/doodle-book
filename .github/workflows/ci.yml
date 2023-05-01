@@ -8,7 +8,7 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
-  ROCKET_DATABASES: '{doodles={url="postgres://raj:iitm@postgres:5432/doodles_test"}}'
+  ROCKET_DATABASES: '{doodles={url="postgres://raj:iitm@localhost:5432/doodles_test"}}'
 
 jobs:
   build:
@@ -20,6 +20,8 @@ jobs:
           POSTGRES_USER: raj
           POSTGRES_PASSWORD: iitm
           POSTGRES_DB: doodles_test
+        ports:
+          - 5432:5432
     steps:
       - uses: actions/checkout@v3
       - name: Build
