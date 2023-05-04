@@ -16,6 +16,7 @@ COPY doodle-wasm/src src/
 RUN touch src/main.rs
 WORKDIR /app
 COPY src src/
+COPY migrations migrations/
 RUN touch src/main.rs
 COPY assets/*.js assets/*.json assets/
 WORKDIR /app/assets
@@ -44,5 +45,6 @@ RUN apt-get update && apt-get -y install libpq5 && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY ./Rocket.toml ./
 COPY templates templates/
+COPY ./assets/static/style.css  /app/assets/static/style.css
 EXPOSE 8000
 CMD [ "doodle-book" ]
