@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:latest
+        image: postgres:12
         env:
           POSTGRES_USER: raj
           POSTGRES_PASSWORD: iitm
