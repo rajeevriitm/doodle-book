@@ -19,6 +19,6 @@ rocket_sync_db_pools = { version = "0.1.0-rc.2", features = [
 diesel_migrations = "2.0.0"
 
 [dev-dependencies]
-dotenv = "0.15.0"
+# dotenv = "0.15.0"
 # [workspace]
 # members = ["doodle-wasm"]

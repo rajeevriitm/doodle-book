@@ -69,8 +69,8 @@ async fn run_migration(rocket: rocket::Rocket<rocket::Build>) -> rocket::Rocket<
         Ok(_) => {
             info!("migration ran")
         }
-        Err(_) => {
-            warn!("")
+        Err(e) => {
+            warn!("migration not run {}", e)
         }
     })
     .await;
