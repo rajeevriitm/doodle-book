@@ -1,4 +1,4 @@
-ARG TYPE=dev
+ARG TYPE=prod
 
 FROM node as base
 RUN curl https://sh.rustup.rs -sSf |  sh -s -- -y

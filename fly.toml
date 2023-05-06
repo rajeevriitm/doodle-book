@@ -1,10 +1,10 @@
-# fly.toml app configuration file generated for doodles on 2023-05-05T18:48:08+05:30
+# fly.toml app configuration file generated for doodles on 2023-05-06T21:08:24+05:30
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
 app = "doodles"
-primary_region = "atl"
+primary_region = "bos"
 
 [http_service]
   internal_port = 8000
