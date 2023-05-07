@@ -47,5 +47,6 @@ WORKDIR /app
 COPY ./Rocket.toml ./
 COPY templates templates/
 COPY ./assets/static/style.css  /app/assets/static/style.css
+COPY ./assets/static/pen.png  /app/assets/static/pen.png
 EXPOSE 8000
 CMD [ "doodle-book" ]
