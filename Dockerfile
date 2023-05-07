@@ -13,7 +13,7 @@ COPY doodle-wasm/Cargo.toml doodle-wasm/Cargo.lock ./
 RUN mkdir ./src && echo 'fn main() { panic!("Dummy Image Called!")}' > ./src/lib.rs
 RUN wasm-pack build && wasm-pack build --release
 COPY doodle-wasm/src src/
-RUN touch src/main.rs
+RUN touch src/lib.rs
 WORKDIR /app
 COPY src src/
 COPY migrations migrations/
@@ -34,6 +34,7 @@ WORKDIR /app
 RUN cargo build  --release
 RUN mv ./target/release/doodle-book ./doodle-book
 WORKDIR /app/assets
+# RUN cat ../doodle-wasm/src/lib.rs
 RUN  npm run build-prod
 
 FROM ${TYPE}-build as source
