@@ -110,7 +110,6 @@ pub async fn create_user(
                     return Err(render_template("signup", err));
                 }
             }
-            dbg!(&user);
             db.run(move |conn| {
                 user.save_to_db(conn)
                     .map(|_| {

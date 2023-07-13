@@ -1,6 +1,6 @@
 // use diesel::insert_into;
 // use rocket_sync_db_pools::diesel::*;
-use ::diesel::prelude::*;
+use diesel::prelude::*;
 // use rocket::serde::{Deserialize, Serialize};
 use crate::model::user::User;
 use crate::schema::{drawings, relationships, users};
@@ -74,9 +74,7 @@ pub struct DrawingForm<'a> {
     width: i32,
 }
 fn check_points_format<'v>(string: &str) -> form::Result<'v, ()> {
-    dbg!(string);
     let res = serde_json::from_str::<Vec<Vec<[i32; 2]>>>(string);
-    dbg!(&res);
     res.map_or(
         Err(Error::validation("Invalid points").into()),
         |collection| {

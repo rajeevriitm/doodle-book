@@ -39,7 +39,7 @@ RUN  npm run build-prod
 
 FROM ${TYPE}-build as source
 
-FROM debian:bullseye-slim as runner
+FROM debian as runner
 COPY --from=source /app/doodle-book /usr/local/bin/doodle-book
 COPY --from=source /app/assets/static /app/assets/static
 RUN apt-get update && apt-get -y install libpq5 && rm -rf /var/lib/apt/lists/*
