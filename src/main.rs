@@ -59,7 +59,7 @@ fn rocket() -> _ {
         .mount("/relationship", routes![follow, unfollow])
         .attach(Template::fairing())
         .attach(Db::fairing())
-        .attach(AdHoc::on_ignite("migration ran", run_migration))
+        // .attach(AdHoc::on_ignite("migration ran", run_migration))
         .attach(AdHoc::config::<Configuration>())
         .mount("/static", FileServer::from(relative!("assets/static/")))
 }
